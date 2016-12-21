@@ -66,5 +66,5 @@ modules.xml
 *.DS_Store
 /deploy.sh
 
-# Ignore the build folder, but add to the production branch:
-build
+# The production folder contains the repository that gets pushed to the site:
+production

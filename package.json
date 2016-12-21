@@ -1,16 +1,15 @@
 {
-  "name": "square1",
+  "name": "square1-api",
   "version": "0.0.1",
-  "description": "Lead tracking and resource management system.",
-  "main": "build/app.js",
+  "description": "API for the lead tracking and resource management system.",
+  "main": "production/app.js",
   "scripts": {
-    "build:server": "babel -d ./build ./server --presets es2015,stage-2",
-    "win:clean": "rmdir /s /q build && mkdir build",
-    "win:copy": "xcopy server\\config build\\config /E /i",
-    "win:build": "npm run win:clean && npm run build:server && npm run win:copy",
+    "build:server": "babel -d ./production ./server --presets es2015,stage-2",
+    "clean": "sh scripts/clean.sh",
+    "build": "npm run clean && npm run build:server && npm run copy",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon ./server/app.js --exec babel-node --presets es2015,stage-2",
-    "start": "node ./build/app.js"
+    "start": "node ./production/app.js"
   },
   "engines": {
     "node": "6",
