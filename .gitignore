@@ -1,3 +1,4 @@
+### Node ###
 # Logs
 logs
 *.log
@@ -29,9 +30,41 @@ build/Release
 # Dependency directories
 node_modules
 jspm_packages
+dictionaries
 
 # Optional npm cache directory
 .npm
 
 # Optional REPL history
 .node_repl_history
+### End Node ###
+
+### WebStorm ###
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+# User-specific stuff:
+.idea/workspace.xml
+.idea/tasks.xml
+
+# Sensitive or high-churn files:
+.idea/dataSources/
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/dataSources.local.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+
+# Other
+*.iml
+modules.xml
+.idea/misc.xml
+### End WebStorm ###
+
+# Other
+*.DS_Store
+/deploy.sh
+
+# Ignore the build folder, but add to the production branch:
+build
