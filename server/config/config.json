@@ -18,7 +18,7 @@
     "production": {
         "username": "test-user",
         "password": "testing",
-        "database": "postgres",
+        "database": "square1",
         "host": "localhost",
         "port": 5432,
         "dialect": "postgres"

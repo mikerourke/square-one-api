@@ -6,14 +6,8 @@ const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config.json')[env];
 
 let db = {};
-let sequelize = null;
-
-if (env === 'production') {
-    sequelize = new Sequelize('postgres://test-user:testing@localhost:5432/square1');
-} else {
-    // The application is executed on the local machine:
-    sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+let sequelize = new Sequelize(config.database, config.username,
+    config.password, config);
 
 fs
     .readdirSync(__dirname)
