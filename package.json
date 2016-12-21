@@ -1,0 +1,15 @@
+{
+  "name": "square1",
+  "version": "0.0.1",
+  "description": "Lead tracking and resource management system.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://8159971@git.dc0.gpaas.net/default.git"
+  },
+  "author": "Mike Rourke",
+  "license": "MIT"
+}
