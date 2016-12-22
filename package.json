@@ -1,38 +1,37 @@
 {
-  "name": "square1-api",
-  "version": "0.0.1",
-  "description": "API for the lead tracking and resource management system.",
-  "main": "production/app.js",
-  "scripts": {
-    "build:server": "babel -d ./production ./server --presets es2015,stage-2",
-    "clean": "sh scripts/clean.sh",
-    "build": "npm run clean && npm run build:server && npm run copy",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "nodemon ./server/app.js --exec babel-node --presets es2015,stage-2",
-    "start": "node ./production/app.js"
-  },
-  "engines": {
-    "node": "6",
-    "npm": "*"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wolfspace/square1"
-  },
-  "author": "Mike Rourke",
-  "license": "MIT",
-  "dependencies": {
-    "body-parser": "^1.15.2",
-    "express": "^4.14.0",
-    "morgan": "^1.7.0",
-    "pg": "^6.1.2",
-    "pg-hstore": "^2.3.2",
-    "sequelize": "^3.28.0"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-stage-2": "^6.18.0",
-    "nodemon": "^1.11.0"
-  }
+    "name": "square1-api",
+    "version": "0.0.1",
+    "description": "API for the lead tracking and resource management system.",
+    "scripts": {
+        "build:server": "babel -d ./production ./src --presets es2015,stage-2",
+        "clean": "sh tools/clean.sh",
+        "build": "npm run clean && npm run build:server",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start:dev": "nodemon ./src/bin/www.js --exec babel-node --presets es2015,stage-2",
+        "start": "node ./bin/www.js"
+    },
+    "engines": {
+        "node": "6",
+        "npm": "*"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/wolfspace/square1-api"
+    },
+    "author": "Mike Rourke",
+    "license": "MIT",
+    "dependencies": {
+        "body-parser": "^1.15.2",
+        "express": "^4.14.0",
+        "morgan": "^1.7.0",
+        "pg": "^6.1.2",
+        "pg-hstore": "^2.3.2",
+        "sequelize": "^3.28.0"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.18.0",
+        "babel-preset-es2015": "^6.18.0",
+        "babel-preset-stage-2": "^6.18.0",
+        "nodemon": "^1.11.0"
+    }
 }
