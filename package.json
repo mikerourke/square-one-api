@@ -19,7 +19,7 @@
         "url": "https://github.com/wolfspace/square1-api"
     },
     "author": "Mike Rourke",
-    "license": "MIT",
+    "license": "GPLv3",
     "dependencies": {
         "body-parser": "^1.15.2",
         "express": "^4.14.0",
