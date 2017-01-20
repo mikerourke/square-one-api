@@ -5,8 +5,8 @@ import Sequelize from 'sequelize';
 const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config.json')[env];
 
-let db = {};
-let sequelize = new Sequelize(
+const db = {};
+const sequelize = new Sequelize(
     config.database,
     config.username,
     config.password,
@@ -15,17 +15,17 @@ let sequelize = new Sequelize(
 
 fs
     .readdirSync(__dirname)
-    .filter(file => {
+    .filter((file) => {
         return (file.indexOf('.') !== 0) &&
                (file !== path.basename(module.filename)) &&
                (file.slice(-3) === '.js');
     })
-    .forEach(file => {
+    .forEach((file) => {
         const model = sequelize['import'](path.join(__dirname, file));
         db[model.name] = model;
     });
 
-Object.keys(db).forEach(modelName => {
+Object.keys(db).forEach((modelName) => {
     if (db[modelName].associate) {
         db[modelName].associate(db);
     }

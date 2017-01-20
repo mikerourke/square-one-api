@@ -1,12 +1,11 @@
-import { Router } from 'express';
 import models from '../models';
 
 const notFoundMessage = { message: 'Lead not found' };
 
 const populatedAppointment = (request) => {
     const requestBody = request.body;
-    let appointmentWithContents = {};
-    Object.keys(requestBody).forEach(key => {
+    const appointmentWithContents = {};
+    Object.keys(requestBody).forEach((key) => {
         if (!key.toString().includes('leadId')) {
             appointmentWithContents[key] = requestBody[key];
         }
@@ -36,7 +35,7 @@ export default (router) => {
         .get((req, res) => {
             return models.Appointment
                 .findById(req.params.appointmentId)
-                .then(appointment => {
+                .then((appointment) => {
                     if (!appointment) {
                         return res.status(404).send(notFoundMessage);
                     }
@@ -47,7 +46,7 @@ export default (router) => {
         .put((req, res) => {
             return models.Appointment
                 .findById(req.params.appointmentId)
-                .then(appointment => {
+                .then((appointment) => {
                     if (!appointment) {
                         return res.status(404).send(notFoundMessage);
                     }
@@ -61,7 +60,7 @@ export default (router) => {
         .delete((req, res) => {
             return models.Appointment
                 .findById(req.params.appointmentId)
-                .then(appointment => {
+                .then((appointment) => {
                     if (!appointment) {
                         return res.status(404).send(notFoundMessage);
                     }

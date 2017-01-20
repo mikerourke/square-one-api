@@ -15,7 +15,7 @@ export default (sequelize, DataTypes) => {
         tableName: 'leads',
         freezeTableName: true,
         classMethods: {
-            associate: models => {
+            associate: (models) => {
                 Lead.hasMany(models.Appointment, {
                     foreignKey: 'leadId',
                     as: 'appointments',

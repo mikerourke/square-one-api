@@ -2,6 +2,13 @@ import models from '../models';
 
 const notFoundMessage = { message: 'Setting not found' };
 
+const whereCondition = (request) => {
+    return {
+        category: request.params.category,
+        groupName: request.params.groupName,
+    };
+};
+
 export default (router) => {
     router
         .route('/settings/:category/:groupName')
@@ -9,12 +16,9 @@ export default (router) => {
             return models.Setting
                 .findAll({
                     attributes: ['data'],
-                    where: {
-                        category: req.params.category,
-                        groupName: req.params.groupName,
-                    },
+                    where: whereCondition(req),
                 })
-                .then(settings => {
+                .then((settings) => {
                     if (!settings) {
                         return res.status(404).send(notFoundMessage);
                     }
@@ -25,12 +29,9 @@ export default (router) => {
         .patch((req, res) => {
             return models.Setting
                 .find({
-                    where: {
-                        category: req.params.category,
-                        groupName: req.params.groupName,
-                    },
+                    where: whereCondition(req),
                 })
-                .then(settings => {
+                .then((settings) => {
                     if (!settings) {
                         return res.status(404).send(notFoundMessage);
                     }
@@ -40,5 +41,5 @@ export default (router) => {
                         .catch(error => res.status(400).send(error));
                 })
                 .catch(error => res.status(400).send(error));
-        })
+        });
 };

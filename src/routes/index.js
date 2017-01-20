@@ -4,9 +4,9 @@ import assignAppointmentRoutes from './appointments';
 import assignSettingRoutes from './settings';
 
 export default (app) => {
-    let router = Router();
+    const router = Router();
     assignLeadRoutes(router);
     assignAppointmentRoutes(router);
     assignSettingRoutes(router);
     app.use('/api', router);
-}
+};

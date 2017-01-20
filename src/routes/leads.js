@@ -5,13 +5,13 @@ const notFoundMessage = { message: 'Lead not found' };
 const appointmentInclusion = {
     include: [{
         model: models.Appointment,
-        as: 'appointments'
-    }]
+        as: 'appointments',
+    }],
 };
 
 const populatedLead = (requestBody) => {
-    let leadWithContents = {};
-    Object.keys(requestBody).forEach(key => {
+    const leadWithContents = {};
+    Object.keys(requestBody).forEach((key) => {
         leadWithContents[key] = requestBody[key];
     });
     return leadWithContents;
@@ -38,7 +38,7 @@ export default (router) => {
         .get((req, res) => {
             return models.Lead
                 .findById(req.params.leadId, appointmentInclusion)
-                .then(lead => {
+                .then((lead) => {
                     if (!lead) {
                         return res.status(404).send(notFoundMessage);
                     }
@@ -49,7 +49,7 @@ export default (router) => {
         .put((req, res) => {
             return models.Lead
                 .findById(req.params.leadId, appointmentInclusion)
-                .then(lead => {
+                .then((lead) => {
                     if (!lead) {
                         return res.status(404).send(notFoundMessage);
                     }
@@ -63,7 +63,7 @@ export default (router) => {
         .delete((req, res) => {
             return models.Lead
                 .findById(req.params.leadId)
-                .then(lead => {
+                .then((lead) => {
                     if (!lead) {
                         return res.status(404).send(notFoundMessage);
                     }
