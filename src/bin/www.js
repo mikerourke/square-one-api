@@ -1,6 +1,6 @@
 import http from 'http';
 import app from '../app';
-import db from '../models/index';
+import db from '../models';
 
 const port = process.env.PORT || 8080;
 

@@ -8,7 +8,7 @@
         "build": "npm run clean && npm run build:server",
         "test": "echo \"Error: no test specified\" && exit 1",
         "start:dev": "nodemon ./src/bin/www.js --exec babel-node --presets es2015,stage-2",
-        "start": "node ./bin/www.js"
+        "start": "babel-node ./src/bin/www.js"
     },
     "engines": {
         "node": "6",

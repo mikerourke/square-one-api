@@ -5,7 +5,7 @@ export default (sequelize, DataTypes) => {
         endAt: DataTypes.DATE,
         appointmentFor: DataTypes.STRING,
         emailAlert: DataTypes.INTEGER,
-        isAllDay: DataTypes.BOOLEAN
+        isAllDay: DataTypes.BOOLEAN,
     }, {
         tableName: 'appointments',
         freezeTableName: true,
@@ -13,10 +13,10 @@ export default (sequelize, DataTypes) => {
             associate: (models) => {
                 Appointment.belongsTo(models.Lead, {
                     foreignKey: 'leadId',
-                    onDelete: 'CASCADE'
+                    onDelete: 'CASCADE',
                 });
-            }
-        }
+            },
+        },
     });
     return Appointment;
 };

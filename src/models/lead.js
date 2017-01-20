@@ -6,11 +6,11 @@ export default (sequelize, DataTypes) => {
         phone: DataTypes.STRING,
         email: {
             type: DataTypes.STRING,
-            validate: { isEmail: true }
+            validate: { isEmail: true },
         },
         address: DataTypes.STRING,
-        notes: DataTypes.JSON,
-        notifications: DataTypes.JSON
+        notes: DataTypes.JSONB,
+        notifications: DataTypes.JSONB,
     }, {
         tableName: 'leads',
         freezeTableName: true,
@@ -18,10 +18,10 @@ export default (sequelize, DataTypes) => {
             associate: models => {
                 Lead.hasMany(models.Appointment, {
                     foreignKey: 'leadId',
-                    as: 'appointments'
+                    as: 'appointments',
                 });
-            }
-        }
+            },
+        },
     });
     return Lead;
 };
