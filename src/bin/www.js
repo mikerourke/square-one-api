@@ -1,3 +1,7 @@
+/**
+ * Starting point for the application.  Loads the server and syncs the
+ *      database.
+ */
 import http from 'http';
 import app from '../app';
 import db from '../models';

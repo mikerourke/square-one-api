@@ -1,3 +1,6 @@
+/**
+ * Sequelize model that represents an Appointment entity.
+ */
 export default (sequelize, DataTypes) => {
     const Appointment = sequelize.define('Appointment', {
         subject: DataTypes.STRING,

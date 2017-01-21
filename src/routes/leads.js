@@ -1,3 +1,6 @@
+/**
+ * Assigns routes for Lead entities to the application router.
+ */
 import models from '../models';
 
 const notFoundMessage = { message: 'Lead not found' };

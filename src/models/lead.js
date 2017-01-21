@@ -1,3 +1,6 @@
+/**
+ * Sequelize model that represents a Lead entity.
+ */
 export default (sequelize, DataTypes) => {
     const Lead = sequelize.define('Lead', {
         name: DataTypes.STRING,
