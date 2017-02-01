@@ -68,3 +68,5 @@ modules.xml
 
 # The production folder contains the repository that gets pushed to the site:
 production
+client
+config/config.json

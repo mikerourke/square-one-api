@@ -3,7 +3,7 @@
  */
 export default (sequelize, DataTypes) => {
     const Lead = sequelize.define('Lead', {
-        name: DataTypes.STRING,
+        leadName: DataTypes.STRING,
         source: DataTypes.STRING,
         leadFee: DataTypes.FLOAT,
         phone: DataTypes.STRING,
@@ -12,6 +12,9 @@ export default (sequelize, DataTypes) => {
             validate: { isEmail: true },
         },
         address: DataTypes.STRING,
+        description: DataTypes.STRING,
+        comments: DataTypes.STRING,
+        status: DataTypes.STRING,
         notes: DataTypes.JSONB,
         notifications: DataTypes.JSONB,
     }, {

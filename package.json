@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "API for the lead tracking and resource management system.",
   "scripts": {
+    "prestart": "sh tools/update-client.sh",
     "start": "nodemon ./src/bin/www.js --exec babel-node",
     "prebuild": "sh tools/clean.sh",
     "build": "babel -d ./production ./src --presets es2015,stage-2",
