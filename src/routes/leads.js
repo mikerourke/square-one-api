@@ -17,6 +17,7 @@ const populatedLead = (requestBody) => {
     Object.keys(requestBody).forEach((key) => {
         leadWithContents[key] = requestBody[key];
     });
+    console.log(leadWithContents);
     return leadWithContents;
 };
 

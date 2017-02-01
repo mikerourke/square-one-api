@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
@@ -12,6 +13,9 @@ app.use(bodyParser.json());
 
 // Setup routes:
 assignRoutes(app);
+
+// Serve up the front end:
+app.use('/', express.static(path.resolve(__dirname, 'client')));
 
 // Setup a default catch-all route that sends back a welcome message in JSON
 // format:
