@@ -3,11 +3,12 @@
   "version": "0.0.1",
   "description": "API for the lead tracking and resource management system.",
   "scripts": {
-    "prestart": "sh tools/update-client.sh",
+    "update-client": "sh tools/updateClient.sh",
     "start": "nodemon ./src/bin/www.js --exec babel-node",
     "start:test": "NODE_ENV=test npm start",
     "prebuild": "sh tools/clean.sh",
-    "build": "babel -d ./production ./src --presets es2015,stage-2",
+    "build": "babel -d ./production ./src",
+    "postbuild": "babel-node tools/updatePackage.js",
     "lint": "esw src tools --color || exit 0",
     "lint:watch": "npm run lint --watch",
     "test": "find ./src -name '*.test.js' | xargs mocha --opts ./mocha.opts || exit 0"
@@ -51,6 +52,9 @@
     "presets": [
       "es2015",
       "stage-2"
+    ],
+    "ignore": [
+      "**/*.test.js"
     ]
   }
 }

@@ -7,11 +7,11 @@ import assignAppointmentRoutes from './appointments';
 import assignSettingRoutes from './settings';
 import assignUserRoutes from './users';
 
-export default (app) => {
+export default (server) => {
     const router = Router();
     assignLeadRoutes(router);
     assignAppointmentRoutes(router);
     assignSettingRoutes(router);
     assignUserRoutes(router);
-    app.use('/api', router);
+    server.use('/api', router);
 };

@@ -3,13 +3,13 @@
  *      database.
  */
 import http from 'http';
-import app from '../app';
+import server from '../index';
 import db from '../models';
 
 const port = process.env.PORT || 8080;
 
-app.set('port', port);
+server.set('port', port);
 
 db.sequelize.sync().then(() => {
-    http.createServer(app).listen(port);
+    http.createServer(server).listen(port);
 });

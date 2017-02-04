@@ -4,25 +4,25 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 import assignRoutes from './routes';
 
-const app = express();
+const server = express();
 
 // Assign middlewares:
-app.use(logger('dev'));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+server.use(logger('dev'));
+server.use(bodyParser.urlencoded({ extended: true }));
+server.use(bodyParser.json());
 
 // Setup routes:
-assignRoutes(app);
+assignRoutes(server);
 
 // Serve up the front end:
-app.use('/', express.static(path.resolve(__dirname, 'client')));
+server.use('/', express.static(path.resolve(__dirname, 'client')));
 
 // Setup a default catch-all route that sends back a welcome message in JSON
 // format:
-app.get('*', (req, res) => {
+server.get('*', (req, res) => {
     res.status(200).send({
         message: 'This is the API router.',
     });
 });
 
-export default app;
+export default server;
