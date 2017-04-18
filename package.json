@@ -3,12 +3,9 @@
   "version": "0.0.1",
   "description": "API for the lead tracking and resource management system.",
   "scripts": {
-    "update-client": "sh tools/updateClient.sh",
     "start": "nodemon ./src/bin/www.js --exec babel-node",
     "start:test": "NODE_ENV=test npm start",
-    "prebuild": "sh tools/clean.sh",
-    "build": "babel -d ./production ./src",
-    "postbuild": "babel-node tools/updatePackage.js",
+    "build": "node internals/scripts/build.js",
     "lint": "esw src tools --color || exit 0",
     "lint:watch": "npm run lint --watch",
     "test": "find ./src -name '*.test.js' | xargs mocha --opts ./mocha.opts || exit 0"
@@ -40,12 +37,16 @@
     "babel-register": "^6.22.0",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
+    "cross-env": "^4.0.0",
     "eslint": "^3.15.0",
     "eslint-config-airbnb-base": "^11.1.0",
+    "eslint-plugin-flowtype": "^2.30.4",
     "eslint-plugin-import": "^2.2.0",
     "eslint-watch": "^3.0.1",
+    "flow-bin": "^0.44.2",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
+    "shelljs": "^0.7.7",
     "supertest": "^3.0.0"
   },
   "babel": {

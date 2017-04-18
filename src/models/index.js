@@ -1,7 +1,9 @@
+/* External dependencies */
 import fs from 'fs';
 import path from 'path';
 import Sequelize from 'sequelize';
 
+/* Internal dependencies */
 const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config.json')[env];
 
@@ -13,15 +15,14 @@ const sequelize = new Sequelize(
     config,
 );
 
-fs
-    .readdirSync(__dirname)
+fs.readdirSync(__dirname)
     .filter((file) => {
         return (file.indexOf('.') !== 0) &&
                (file !== path.basename(module.filename)) &&
                (file.slice(-3) === '.js');
     })
     .forEach((file) => {
-        const model = sequelize['import'](path.join(__dirname, file));
+        const model = sequelize.import(path.join(__dirname, file));
         db[model.name] = model;
     });
 

@@ -1,8 +1,7 @@
-/**
- * Starting point for the application.  Loads the server and syncs the
- *      database.
- */
+/* External dependencies */
 import http from 'http';
+
+/* Internal dependencies */
 import server from '../index';
 import db from '../models';
 
