@@ -3,6 +3,8 @@ import models from '../index';
 
 /* eslint-disable */
 
+// TODO: Fix this test to accommodate for model updates.
+
 describe('User Model', () => {
     let user;
     const userInstance = {
@@ -13,18 +15,18 @@ describe('User Model', () => {
         title: 'Test Person',
         password: '1234567',
         passwordConfirmation: '1234567',
-    }
+    };
 
     before(() => {
         models.User.destroy({
             where: {},
         });
-    })
+    });
 
     describe('User Field Validation', () => {
         beforeEach(() => {
             user = models.User.build(userInstance);
-        })
+        });
 
         it('is valid', (done) => {
             user.validate().should.eventually.not.equal(undefined).notify(done);
@@ -62,7 +64,7 @@ describe('User Model', () => {
                 user.email = validAddress;
                 user.validate().should.eventually.equal(null).notify(done);
             });
-        })
+        });
 
         const invalidAddresses = [
             'user@example,com', 
@@ -77,7 +79,7 @@ describe('User Model', () => {
                     user.validate().should.eventually.not.equal(undefined)
                         .notify(done);
             });
-        })
+        });
 
         it('email addresses should be unique', (done) => {
             const duplicateUser = user;
@@ -102,7 +104,7 @@ describe('User Model', () => {
 
     it('should encrypt the password', (done) => {
         const digest = '$2a$10$gYpgjraxgEtUl8MfyzHvZuOFAaPjagx' +
-                       '9en550HCthZALRS1BWqWKa'
+                       '9en550HCthZALRS1BWqWKa';
         models.User.findOne({
             where: {
                 email: 'jt@website.com',

@@ -1,9 +1,7 @@
-/**
- * Sequelize model that represents a Lead entity.
- */
-export default (sequelize, DataTypes) => {
-    const Lead = sequelize.define('Lead', {
+export default (sequelize, DataTypes) =>
+    sequelize.define('Lead', {
         leadName: DataTypes.STRING,
+        contactName: DataTypes.STRING,
         source: DataTypes.STRING,
         leadFee: DataTypes.FLOAT,
         phone: DataTypes.STRING,
@@ -12,22 +10,14 @@ export default (sequelize, DataTypes) => {
             validate: { isEmail: true },
         },
         address: DataTypes.STRING,
+        lat: DataTypes.DECIMAL,
+        lng: DataTypes.DECIMAL,
         description: DataTypes.STRING,
-        comments: DataTypes.STRING,
         status: DataTypes.STRING,
-        notes: DataTypes.JSONB,
-        notifications: DataTypes.JSONB,
+        assignTo: DataTypes.STRING,
+        createdBy: DataTypes.STRING,
+        updatedBy: DataTypes.STRING,
     }, {
         tableName: 'leads',
         freezeTableName: true,
-        classMethods: {
-            associate: (models) => {
-                Lead.hasMany(models.Appointment, {
-                    foreignKey: 'leadId',
-                    as: 'appointments',
-                });
-            },
-        },
     });
-    return Lead;
-};

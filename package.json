@@ -1,10 +1,10 @@
 {
-  "name": "square1-api",
+  "name": "square-one-api",
   "version": "0.0.1",
   "description": "API for the lead tracking and resource management system.",
   "scripts": {
     "start": "nodemon ./src/bin/www.js --exec babel-node",
-    "start:test": "NODE_ENV=test npm start",
+    "start:test": "cross-env NODE_ENV=test npm start",
     "build": "node internals/scripts/build.js",
     "lint": "esw src tools --color || exit 0",
     "lint:watch": "npm run lint --watch",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wolfspace/square1-api"
+    "url": "https://github.com/mikerourke/square-one-api"
   },
   "author": "Mike Rourke",
   "license": "GPL-3.0",

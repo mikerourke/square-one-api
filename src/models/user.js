@@ -1,11 +1,9 @@
-/**
- * Sequelize model that represents a User entity.
- */
+/* External dependencies */
 import bcrypt from 'bcrypt';
 
 
-const checkForSecurePassword = (user, options) => {
-    return new Promise((resolve, reject) => {
+const checkForSecurePassword = (user, options) =>
+    new Promise((resolve, reject) => {
         if (user.password) {
             if (user.password !== user.passwordConfirmation) {
                 reject("Password confirmation doesn't match Password");
@@ -21,10 +19,9 @@ const checkForSecurePassword = (user, options) => {
             reject('No password found.');
         }
     });
-};
 
-export default (sequelize, DataTypes) => {
-    const User = sequelize.define('User', {
+export default (sequelize, DataTypes) =>
+    sequelize.define('User', {
         username: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -33,8 +30,7 @@ export default (sequelize, DataTypes) => {
                 len: [1, 15],
             },
         },
-        firstName: DataTypes.STRING,
-        lastName: DataTypes.STRING,
+        fullName: DataTypes.STRING,
         email: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -53,6 +49,7 @@ export default (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: false,
         },
+        accessLevel: DataTypes.STRING,
         passwordDigest: {
             type: DataTypes.STRING,
             validate: {
@@ -100,5 +97,3 @@ export default (sequelize, DataTypes) => {
             },
         },
     });
-    return User;
-};

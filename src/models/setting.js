@@ -1,8 +1,5 @@
-/**
- * Sequelize model that represents a Setting entity.
- */
-export default (sequelize, DataTypes) => {
-    const Setting = sequelize.define('Setting', {
+export default (sequelize, DataTypes) =>
+    sequelize.define('Setting', {
         category: DataTypes.STRING,
         settingName: DataTypes.STRING,
         data: DataTypes.JSONB,
@@ -16,5 +13,3 @@ export default (sequelize, DataTypes) => {
             },
         ],
     });
-    return Setting;
-};
