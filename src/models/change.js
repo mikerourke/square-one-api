@@ -1,5 +1,10 @@
 export default (sequelize, DataTypes) =>
     sequelize.define('Change', {
+        id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
+        },
         changeType: DataTypes.STRING,
         iconName: DataTypes.STRING,
         title: DataTypes.STRING,
@@ -9,4 +14,9 @@ export default (sequelize, DataTypes) =>
     }, {
         tableName: 'changes',
         freezeTableName: true,
+        hooks: {
+            beforeCreate: (change, options) => {
+                change.id = 10100000;
+            },
+        },
     });

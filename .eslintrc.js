@@ -66,10 +66,11 @@ module.exports = {
         'import/no-unresolved': 0,
         'no-console': 1,
         'no-debugger': 1,
+        'no-param-reassign': 0,
         'semi': [1, 'always'],
         'no-trailing-spaces': 1,
         'eol-last': 0,
-        'no-unused-vars': 2,
+        'no-unused-vars': 1,
         'no-underscore-dangle': 2,
         'no-alert': 0,
         'no-lone-blocks': 0
