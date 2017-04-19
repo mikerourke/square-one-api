@@ -1,3 +1,5 @@
+import getNextIdNumber from '../lib/id-generator';
+
 export default (sequelize, DataTypes) =>
     sequelize.define('Lead', {
         id: {
@@ -25,10 +27,13 @@ export default (sequelize, DataTypes) =>
         tableName: 'leads',
         freezeTableName: true,
         hooks: {
-            beforeCreate: (lead, options) => new Promise((resolve) => {
-                // TODO: Add code to auto-increment Lead ID.
-                lead.id = 27;
-                resolve();
+            beforeCreate: (lead, options) => new Promise((resolve, reject) => {
+                getNextIdNumber(101, 'Lead')
+                    .then((nextId) => {
+                        lead.id = nextId;
+                        resolve();
+                    })
+                    .catch(error => reject(error));
             }),
         },
     });

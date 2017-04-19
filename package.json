@@ -3,11 +3,12 @@
   "version": "0.0.1",
   "description": "API for the lead tracking and resource management system.",
   "scripts": {
-    "start": "nodemon ./src/bin/www.js --exec babel-node",
-    "start:test": "cross-env NODE_ENV=test npm start",
     "build": "node internals/scripts/build.js",
     "lint": "esw src tools --color || exit 0",
     "lint:watch": "npm run lint --watch",
+    "setup": "rm -rf node_modules && yarn cache clean && yarn install",
+    "start": "nodemon ./src/bin/www.js --exec babel-node",
+    "start:test": "cross-env NODE_ENV=test npm start",
     "test": "find ./src -name '*.test.js' | xargs mocha --opts ./mocha.opts || exit 0"
   },
   "engines": {
@@ -47,6 +48,7 @@
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
     "shelljs": "^0.7.7",
+    "sql": "^0.75.0",
     "supertest": "^3.0.0"
   },
   "babel": {

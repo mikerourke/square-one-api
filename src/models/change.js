@@ -1,3 +1,5 @@
+import getNextIdNumber from '../lib/id-generator';
+
 export default (sequelize, DataTypes) =>
     sequelize.define('Change', {
         id: {
