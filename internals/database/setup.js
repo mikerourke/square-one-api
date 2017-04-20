@@ -1,6 +1,8 @@
+/* External dependencies */
 const pg = require('pg');
-const sql = require('sql');
 
+/* Internal dependencies */
+const insertStatements = require('./sql-inserts');
 const config = require('../../src/config/config.json')['development'];
 
 const pgConfig = {
@@ -15,35 +17,26 @@ const pgConfig = {
 
 const pool = new pg.Pool(pgConfig);
 
-// TODO: Finish insert queries for initial setup.
-
-const leads = sql.Table.define({
-    name: 'leads',
-    columns: ['id', 'createdAt', 'updatedAt']
-});
-
-const testQuery = leads.insert(
-    leads.id.value(1011704190001),
-    leads.createdAt.value('2017-04-19 17:55:59.605 +00:00'),
-    leads.updatedAt.value('2017-04-19 17:55:59.605 +00:00')
-).toQuery();
-
 pool.on('error', (error, client) => {
     console.error('Idle client error', error.message, error.stack);
 });
 
+const getPromiseInserts = (client) =>
+    insertStatements.map(insertStatement => {
+        const { text, values } = insertStatement;
+        return new Promise((resolve) => {
+            client.query(text, values, (error, result) => resolve());
+        });
+    });
+
 pool.connect((error, client, done) => {
-   if (error) {
-       return console.error('Error fetching from client pool', error);
-   }
+    if (error) {
+        return console.error('Error fetching from client pool', error);
+    }
 
-   client.query(testQuery.text, testQuery.values, (error, result) => {
-       done(error);
-
-       if (error) {
-           return console.error('Error running query', error);
-       }
-
-       console.log(result);
-   })
+    const promiseInserts = getPromiseInserts(client);
+    Promise.all(promiseInserts).then(values => {
+        console.log(values);
+        done();
+    });
 });

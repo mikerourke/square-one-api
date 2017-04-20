@@ -1,9 +1,12 @@
+/* @flow */
+
+/* Internal dependencies */
 import getNextIdNumber from '../lib/id-generator';
 
-export default (sequelize, DataTypes) =>
-    sequelize.define('Lead', {
+export default (sequelize: Sequelize, DataTypes: DataTypes) => {
+    const Lead = sequelize.define('Lead', {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.BIGINT,
             primaryKey: true,
         },
         leadName: DataTypes.STRING,
@@ -26,8 +29,24 @@ export default (sequelize, DataTypes) =>
     }, {
         tableName: 'leads',
         freezeTableName: true,
+        classMethods: {
+            associate: (models) => {
+                Lead.hasMany(models.Change, {
+                    foreignKey: 'parentId',
+                    as: 'changes',
+                });
+                Lead.hasMany(models.Message, {
+                    foreignKey: 'parentId',
+                    as: 'messages',
+                });
+                Lead.hasMany(models.Note, {
+                    foreignKey: 'parentId',
+                    as: 'notes',
+                });
+            },
+        },
         hooks: {
-            beforeCreate: (lead, options) => new Promise((resolve, reject) => {
+            beforeCreate: lead => new Promise((resolve, reject) => {
                 getNextIdNumber(101, 'Lead')
                     .then((nextId) => {
                         lead.id = nextId;
@@ -37,3 +56,5 @@ export default (sequelize, DataTypes) =>
             }),
         },
     });
+    return Lead;
+}

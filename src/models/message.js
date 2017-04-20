@@ -1,5 +1,9 @@
-export default (sequelize, DataTypes) =>
-    sequelize.define('Message', {
+export default (sequelize, DataTypes) => {
+    const Message = sequelize.define('Message', {
+        id: {
+            type: DataTypes.BIGINT,
+            primaryKey: true,
+        },
         messageType: DataTypes.STRING,
         recipient: DataTypes.STRING,
         subject: DataTypes.STRING,
@@ -9,4 +13,14 @@ export default (sequelize, DataTypes) =>
     }, {
         tableName: 'messages',
         freezeTableName: true,
+        classMethods: {
+            associate: (models) => {
+                Message.belongsTo(models.Lead, {
+                    foreignKey: 'parentId',
+                    onDelete: 'CASCADE',
+                });
+            },
+        },
     });
+    return Message;
+};
