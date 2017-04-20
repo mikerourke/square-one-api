@@ -49,18 +49,9 @@
     "flow-bin": "^0.44.2",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
+    "sequelize-mock": "^0.7.0",
     "shelljs": "^0.7.7",
     "sql": "^0.75.0",
     "supertest": "^3.0.0"
-  },
-  "babel": {
-    "presets": [
-      "es2015",
-      "stage-2",
-      "flow"
-    ],
-    "ignore": [
-      "**/*.test.js"
-    ]
   }
 }

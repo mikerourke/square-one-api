@@ -1,10 +1,11 @@
-import { expect } from 'chai';
-import models from '../index';
-
-/* eslint-disable */
+import db from '../index';
 
 describe('Models', () => {
+    before((done) => {
+        db.sequelize.sync().then(() => done());
+    });
+
     it('returns the user model', () => {
-        expect(models.User).to.be.ok;
+        expect(db.User).to.not.be.undefined;
     });
 });

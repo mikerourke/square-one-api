@@ -47,7 +47,7 @@ export default (sequelize: Sequelize, DataTypes: DataTypes) => {
         },
         hooks: {
             beforeCreate: lead => new Promise((resolve, reject) => {
-                getNextIdNumber(101, 'Lead')
+                getNextIdNumber(Lead)
                     .then((nextId) => {
                         lead.id = nextId;
                         resolve();
@@ -57,4 +57,4 @@ export default (sequelize: Sequelize, DataTypes: DataTypes) => {
         },
     });
     return Lead;
-}
+};

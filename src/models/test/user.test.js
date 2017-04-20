@@ -1,7 +1,4 @@
-import { assert, expect, should } from 'chai';
-import models from '../index';
-
-/* eslint-disable */
+import db from '../index';
 
 // TODO: Fix this test to accommodate for model updates.
 
@@ -17,15 +14,18 @@ describe('User Model', () => {
         passwordConfirmation: '1234567',
     };
 
-    before(() => {
-        models.User.destroy({
-            where: {},
-        });
+    before((done) => {
+        db.sequelize.sync().then(() => {
+            db.User.destroy({
+                where: {},
+            });
+            done();
+        })
     });
 
     describe('User Field Validation', () => {
         beforeEach(() => {
-            user = models.User.build(userInstance);
+            user = db.User.build(userInstance);
         });
 
         it('is valid', (done) => {
@@ -105,7 +105,7 @@ describe('User Model', () => {
     it('should encrypt the password', (done) => {
         const digest = '$2a$10$gYpgjraxgEtUl8MfyzHvZuOFAaPjagx' +
                        '9en550HCthZALRS1BWqWKa';
-        models.User.findOne({
+        db.User.findOne({
             where: {
                 email: 'jt@website.com',
             }
@@ -119,7 +119,7 @@ describe('User Model', () => {
 
     describe('User Password Validation', () => {
         it('should authenticate the user', (done) => {
-            models.User.create(userInstance)
+            db.User.create(userInstance)
                 .then(user => {
                     user.authenticate('7654321')
                         .should.eventually.equal('Invalid password')

@@ -44,35 +44,35 @@ module.exports = {
         mocha: true
     },
     rules: {
-        'max-len': [2, 80, 4, { 'ignoreUrls': true }],
+        'max-len': ['error', 80, 4, { 'ignoreUrls': true }],
         // Since I develop on both Windows and Mac, I don't want to have to keep
         // fixing this:
-        'linebreak-style': 0,
+        'linebreak-style': 'off',
         /*
          Airbnb Style Overrides:
          Airbnb specifies 2 tabs, but I prefer 4. I'm not a fan of the way
          they handle switch indenting either:
          */
-        'arrow-body-style': [0, 'as-needed'],
-        'indent': [1, 4, { 'SwitchCase': 1 }],
-        'import/default': 0,
-        'import/extensions': 0,
-        'import/no-duplicates': 1,
-        'import/no-extraneous-dependencies': 0,
-        'import/named': 0,
-        'import/namespace': [0, { 'allowComputed': true }],
-        'import/no-named-as-default': 0,
-        'import/no-named-as-default-member': 0,
-        'import/no-unresolved': 0,
-        'no-console': 1,
-        'no-debugger': 1,
-        'no-param-reassign': 0,
-        'semi': [1, 'always'],
-        'no-trailing-spaces': 1,
-        'eol-last': 0,
-        'no-unused-vars': 1,
-        'no-underscore-dangle': 2,
-        'no-alert': 0,
-        'no-lone-blocks': 0
+        'arrow-body-style': ['off', 'as-needed'],
+        'indent': ['warn', 4, { 'SwitchCase': 1 }],
+        'import/default': 'off',
+        'import/extensions': 'off',
+        'import/no-duplicates': 'warn',
+        'import/no-extraneous-dependencies': 'off',
+        'import/named': 'off',
+        'import/namespace': ['off', { 'allowComputed': true }],
+        'import/no-named-as-default': 'off',
+        'import/no-named-as-default-member': 'off',
+        'import/no-unresolved': 'off',
+        'no-console': 'warn',
+        'no-debugger': 'warn',
+        'no-param-reassign': 'off',
+        'semi': ['warn', 'always'],
+        'no-trailing-spaces': 'off',
+        'eol-last': 'off',
+        'no-unused-vars': 'warn',
+        'no-underscore-dangle': 'error',
+        'no-alert': 'off',
+        'no-lone-blocks': 'off'
     }
 };
