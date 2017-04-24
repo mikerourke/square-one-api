@@ -2,8 +2,9 @@
 
 /* Internal dependencies */
 import getNextIdNumber from '../lib/id-generator';
+import { User } from './index';
 
-export default (sequelize: Sequelize, DataTypes: DataTypes) => {
+const changeModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
     const Change = sequelize.define('Change', {
         id: {
             type: DataTypes.BIGINT,
@@ -14,8 +15,8 @@ export default (sequelize: Sequelize, DataTypes: DataTypes) => {
         iconName: DataTypes.STRING,
         title: DataTypes.STRING,
         details: DataTypes.STRING,
-        createdBy: DataTypes.STRING,
-        updatedBy: DataTypes.STRING,
+        createdBy: DataTypes.INTEGER,
+        updatedBy: DataTypes.INTEGER,
     }, {
         tableName: 'changes',
         freezeTableName: true,
@@ -40,3 +41,5 @@ export default (sequelize: Sequelize, DataTypes: DataTypes) => {
     });
     return Change;
 }
+
+export default changeModel;

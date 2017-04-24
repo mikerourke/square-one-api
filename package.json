@@ -10,7 +10,7 @@
     "setup": "rm -rf node_modules && yarn cache clean && yarn install",
     "start": "nodemon ./src/bin/www.js --exec babel-node",
     "start:test": "cross-env NODE_ENV=test npm start",
-    "test": "find ./src -name '*.test.js' | xargs mocha --opts ./mocha.opts || exit 0",
+    "test": "find ./src -name '*.test.js' | xargs cross-env NODE_ENV=test mocha --opts ./mocha.opts || exit 0",
     "torus:start": "torus run npm run start",
     "torus:test": "cross-env NODE_ENV=test torus run npm run test"
   },

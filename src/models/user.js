@@ -20,7 +20,7 @@ const checkForSecurePassword = (user, options) =>
         }
     });
 
-export default (sequelize, DataTypes) =>
+const userModel = (sequelize, DataTypes) =>
     sequelize.define('User', {
         username: {
             type: DataTypes.STRING,
@@ -97,3 +97,5 @@ export default (sequelize, DataTypes) =>
             },
         },
     });
+
+export default userModel;

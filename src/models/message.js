@@ -2,18 +2,9 @@
 
 /* Internal dependencies */
 import getNextIdNumber from '../lib/id-generator';
-import sendTextMessage from '../lib/text-message';
+import sendTextMessages from '../lib/text-message';
 
-// TODO: Finish implementation for automatically sending text messages.
-const sendMessageBeforeCreate = (message: Object): Promise<*> =>
-    new Promise((resolve, reject) => {
-        const { recipient, body } = message;
-        sendTextMessage(recipient, body)
-            .then(() => resolve())
-            .catch(error => reject(error));
-    });
-
-export default (sequelize: Sequelize, DataTypes: DataTypes) => {
+const messageModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
     const Message = sequelize.define('Message', {
         id: {
             type: DataTypes.BIGINT,
@@ -24,12 +15,8 @@ export default (sequelize: Sequelize, DataTypes: DataTypes) => {
         recipient: DataTypes.STRING,
         subject: DataTypes.STRING,
         body: DataTypes.STRING,
-        wasSent: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
-        },
-        createdBy: DataTypes.STRING,
-        updatedBy: DataTypes.STRING,
+        createdBy: DataTypes.INTEGER,
+        updatedBy: DataTypes.INTEGER,
     }, {
         tableName: 'messages',
         freezeTableName: true,
@@ -50,9 +37,17 @@ export default (sequelize: Sequelize, DataTypes: DataTypes) => {
                     })
                     .catch(error => reject(error));
             }),
+            /**
+             * Send text message to the user using the Twilio API after the
+             *      database record is created.
+             */
             afterCreate: message => new Promise((resolve, reject) => {
                 const { recipient, body } = message;
-                sendTextMessage(recipient, body)
+                const messageToSend = {
+                    body,
+                    to: recipient,
+                };
+                sendTextMessages([messageToSend])
                     .then(() => resolve())
                     .catch(error => reject(error));
             }),
@@ -60,3 +55,5 @@ export default (sequelize: Sequelize, DataTypes: DataTypes) => {
     });
     return Message;
 };
+
+export default messageModel;

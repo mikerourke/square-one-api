@@ -30,7 +30,7 @@ const populatedSetting = (requestBody) => {
  * Assigns routes to the Express Router instance associated with Setting models.
  * @param {Object} router Express router that routes are assigned to.
  */
-export default (router) => {
+const assignSettingRoutes = (router) => {
     router
         .route('/settings/')
         .get((req, res) => {
@@ -92,3 +92,5 @@ export default (router) => {
                 .catch(error => res.status(400).send(error));
         });
 };
+
+export default assignSettingRoutes;

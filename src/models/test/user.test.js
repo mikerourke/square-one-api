@@ -6,20 +6,23 @@ describe('User Model', () => {
     let user;
     const userInstance = {
         username: 'tester',
-        firstName: 'John',
-        lastName: 'Testinghouse',
+        firstName: 'John Testinghouse',
         email: 'jt@website.com',
         title: 'Test Person',
+        isLoggedIn: false,
+        accessLevel: 'admin',
         password: '1234567',
         passwordConfirmation: '1234567',
     };
 
     before((done) => {
         db.sequelize.sync().then(() => {
-            db.User.destroy({
-                where: {},
+            db.User.max('id').then((max) => {
+                db.User.destroy({
+                    where: { id: max },
+                });
+                done();
             });
-            done();
         })
     });
 
@@ -29,27 +32,37 @@ describe('User Model', () => {
         });
 
         it('is valid', (done) => {
-            user.validate().should.eventually.not.equal(undefined).notify(done);
+            user.validate()
+                .should.eventually.not.equal(undefined)
+                .notify(done);
         });
 
         it('must have a username', (done) => {
             user.username = '   ';
-            user.validate().should.eventually.not.equal(undefined).notify(done);
+            user.validate()
+                .should.eventually.not.equal(undefined)
+                .notify(done);
         });
 
         it('must have an email', (done) => {
             user.email = '   ';
-            user.validate().should.eventually.not.equal(undefined).notify(done);
+            user.validate()
+                .should.eventually.not.equal(undefined)
+                .notify(done);
         });
 
-        it('username should not be too long', (done) => {
+        it('username cannot be too long', (done) => {
             user.username = 'a'.repeat(16);
-            user.validate().should.eventually.not.equal(undefined).notify(done);
+            user.validate()
+                .should.eventually.not.equal(undefined)
+                .notify(done);
         });
 
-        it('email should not be too long', (done) => {
+        it('email cannot be too long', (done) => {
             user.email = 'a'.repeat(244) + '@example.com';
-            user.validate().should.eventually.not.equal(undefined).notify(done);
+            user.validate()
+                .should.eventually.not.equal(undefined)
+                .notify(done);
         });
 
         const validAddresses = [
@@ -60,9 +73,11 @@ describe('User Model', () => {
             'alice+bob@baz.cn'
         ];
         validAddresses.forEach((validAddress) => {
-            it(`email should accept valid address: ${validAddress}`, (done) => {
+            it(`email accepts valid address: ${validAddress}`, (done) => {
                 user.email = validAddress;
-                user.validate().should.eventually.equal(null).notify(done);
+                user.validate()
+                    .should.eventually.equal(null)
+                    .notify(done);
             });
         });
 
@@ -73,36 +88,42 @@ describe('User Model', () => {
             'alice+bob@bar+baz.cn'
         ];
         invalidAddresses.forEach((invalidAddress) => {
-            it(`email should reject invalid address: ${invalidAddress}`, 
+            it(`email rejects invalid address: ${invalidAddress}`,
                 (done) => {
                     user.email = invalidAddress;
-                    user.validate().should.eventually.not.equal(undefined)
+                    user.validate()
+                        .should.eventually.not.equal(undefined)
                         .notify(done);
             });
         });
 
-        it('email addresses should be unique', (done) => {
+        it('email addresses are unique', (done) => {
             const duplicateUser = user;
             user.save()
                 .then(() => {
-                    duplicateUser.save().should.eventually.not.equal(undefined)
+                    duplicateUser.save()
+                        .should.eventually.not.equal(undefined)
                         .notify(done);
                 })
                 .catch(error => done());
         });
 
-        it('password should be present (nonblank)', (done) => {
+        it('password is present (nonblank)', (done) => {
             user.password = user.passwordConfirmation = ' '.repeat(6);
-            user.validate().should.eventually.not.equal(undefined).notify(done);
+            user.validate()
+                .should.eventually.not.equal(undefined)
+                .notify(done);
         });
 
-        it('password should have a minimum length', (done) => {
+        it('password has a minimum length', (done) => {
             user.password = user.passwordConfirmation = ' '.repeat(5);
-            user.validate().should.eventually.not.equal(undefined).notify(done);
+            user.validate()
+                .should.eventually.not.equal(undefined)
+                .notify(done);
         });
     });
 
-    it('should encrypt the password', (done) => {
+    it('encrypts the password', (done) => {
         const digest = '$2a$10$gYpgjraxgEtUl8MfyzHvZuOFAaPjagx' +
                        '9en550HCthZALRS1BWqWKa';
         db.User.findOne({
@@ -112,22 +133,18 @@ describe('User Model', () => {
         }).then(result => {
             expect(result.passwordDigest).to.equal(digest);
             done();
-        }).catch(error => {
-            done();
-        });
+        }).catch(error => done());
     });
 
     describe('User Password Validation', () => {
-        it('should authenticate the user', (done) => {
+        it('authenticates the user', (done) => {
             db.User.create(userInstance)
                 .then(user => {
                     user.authenticate('7654321')
                         .should.eventually.equal('Invalid password')
                         .notify(done);
                 })
-                .catch(error => {
-                    done();
-                });
+                .catch(error => done());
         })
     })
 });

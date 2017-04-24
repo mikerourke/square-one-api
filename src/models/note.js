@@ -3,7 +3,7 @@
 /* Internal dependencies */
 import getNextIdNumber from '../lib/id-generator';
 
-export default (sequelize: Sequelize, DataTypes: DataTypes) => {
+const noteModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
     const Note = sequelize.define('Note', {
         id: {
             type: DataTypes.BIGINT,
@@ -12,8 +12,8 @@ export default (sequelize: Sequelize, DataTypes: DataTypes) => {
         parentId: DataTypes.BIGINT,
         contents: DataTypes.STRING,
         isPrivate: DataTypes.BOOLEAN,
-        createdBy: DataTypes.STRING,
-        updatedBy: DataTypes.STRING,
+        createdBy: DataTypes.INTEGER,
+        updatedBy: DataTypes.INTEGER,
     }, {
         tableName: 'notes',
         freezeTableName: true,
@@ -38,3 +38,5 @@ export default (sequelize: Sequelize, DataTypes: DataTypes) => {
     });
     return Note;
 };
+
+export default noteModel;

@@ -11,17 +11,13 @@ const notFoundMessage = { message: 'User not found' };
  * @param {Object} entity Entity containing the data to build the condition.
  * @returns {Object} Condition object passed to Sequelize.
  */
-const whereCondition = (entity) => {
-    return {
-        username: entity.username,
-    };
-};
+const whereCondition = entity => ({ username: entity.username });
 
 /**
  * Assigns routes to the Express Router instance associated with User models.
  * @param {Object} router Express router that routes are assigned to.
  */
-export default (router) => {
+const assignUserRoutes = (router) => {
     router
         .route('/users/:username')
         .get((req, res) => {
@@ -93,3 +89,5 @@ export default (router) => {
                 .catch(error => res.status(400).send(error));
         });
 };
+
+export default assignUserRoutes;

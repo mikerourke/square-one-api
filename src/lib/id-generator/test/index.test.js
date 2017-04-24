@@ -25,7 +25,8 @@ describe('ID Generator', () => {
 
     it('should generate the next ID number', (done) => {
         const expectedId = getIdForTesting() + 1;
-        getNextIdNumber(LeadMock).should.eventually.equal(expectedId)
+        getNextIdNumber(LeadMock)
+            .should.eventually.equal(expectedId)
             .notify(done);
     })
 });

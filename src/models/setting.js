@@ -1,4 +1,4 @@
-export default (sequelize, DataTypes) =>
+const settingModel = (sequelize, DataTypes) =>
     sequelize.define('Setting', {
         category: DataTypes.STRING,
         settingName: DataTypes.STRING,
@@ -13,3 +13,5 @@ export default (sequelize, DataTypes) =>
             },
         ],
     });
+
+export default settingModel;
