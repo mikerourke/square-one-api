@@ -1,6 +1,9 @@
+/* @flow */
+
+/* Internal dependencies */
 import getNextIdNumber from '../lib/id-generator';
 
-export default (sequelize, DataTypes) => {
+export default (sequelize: Sequelize, DataTypes: DataTypes) => {
     const Change = sequelize.define('Change', {
         id: {
             type: DataTypes.BIGINT,
@@ -25,9 +28,14 @@ export default (sequelize, DataTypes) => {
             },
         },
         hooks: {
-            beforeCreate: (change, options) => {
-                change.id = 10100000;
-            },
+            beforeCreate: change => new Promise((resolve, reject) => {
+                getNextIdNumber(Change)
+                    .then((nextId) => {
+                        change.id = nextId;
+                        resolve();
+                    })
+                    .catch(error => reject(error));
+            }),
         },
     });
     return Change;

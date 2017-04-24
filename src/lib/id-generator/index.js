@@ -22,7 +22,7 @@ const getTwoDigitDate = (dateElement: string): string => {
  *      so 4/20/2017 would be 170420 in the ID number.
  * @returns {string} Date portion of the ID number.
  */
-const currentDateIdElement = (): string => {
+export const currentDateIdElement = (): string => {
     const dateForFormat = new Date();
     const twoDigitYear = dateForFormat.getFullYear().toString();
     const currentMonth = (dateForFormat.getMonth() + 1).toString();

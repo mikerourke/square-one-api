@@ -5,7 +5,7 @@ const getEntityTable = (tableName) => sql.Table.define({
     columns: ['id', 'createdAt', 'updatedAt', 'parentId']
 });
 
-const getInsertStatement = (prefix, tableName) => {
+const getEntityInsertStatement = (prefix, tableName) => {
     const idAsString = `${prefix}1704010001`;
     const entityTable = getEntityTable(tableName);
     return entityTable.insert(
@@ -27,7 +27,7 @@ const getChildInsertStatement = (prefix, tableName) => {
 };
 
 module.exports = [
-    getInsertStatement(101, 'leads'),
+    getEntityInsertStatement(101, 'leads'),
     getChildInsertStatement(102, 'changes'),
     getChildInsertStatement(103, 'messages'),
     getChildInsertStatement(104, 'notes'),
