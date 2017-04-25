@@ -3,8 +3,8 @@
 /* Internal dependencies */
 import getNextIdNumber from '../lib/id-generator';
 
-const noteModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
-    const Note = sequelize.define('Note', {
+const defineNote = (sequelize: Sequelize, DataTypes: DataTypes) => {
+    const noteModel = sequelize.define('Note', {
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,
@@ -19,7 +19,7 @@ const noteModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
         freezeTableName: true,
         classMethods: {
             associate: (models) => {
-                Note.belongsTo(models.Lead, {
+                noteModel.belongsTo(models.Lead, {
                     foreignKey: 'parentId',
                     onDelete: 'CASCADE',
                 });
@@ -27,7 +27,7 @@ const noteModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
         },
         hooks: {
             beforeCreate: note => new Promise((resolve, reject) => {
-                getNextIdNumber(Note)
+                getNextIdNumber(noteModel)
                     .then((nextId) => {
                         note.id = nextId;
                         resolve();
@@ -36,7 +36,7 @@ const noteModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
             }),
         },
     });
-    return Note;
+    return noteModel;
 };
 
-export default noteModel;
+export default defineNote;

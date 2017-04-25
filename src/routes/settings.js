@@ -1,8 +1,12 @@
-/**
- * Assigns routes for Setting entities to the application router.
- */
+/* @flow */
+
+/* Internal dependencies */
 import models from '../models';
 
+/* Types */
+import type { Router } from 'express';
+
+const { Setting } = (models: Object);
 const notFoundMessage = { message: 'Setting not found' };
 
 /**
@@ -18,23 +22,15 @@ const whereCondition = (entity) => {
     };
 };
 
-const populatedSetting = (requestBody) => {
-    const settingWithContents = {};
-    Object.keys(requestBody).forEach((key) => {
-        settingWithContents[key] = requestBody[key];
-    });
-    return settingWithContents;
-};
-
 /**
  * Assigns routes to the Express Router instance associated with Setting models.
  * @param {Object} router Express router that routes are assigned to.
  */
-const assignSettingRoutes = (router) => {
+const assignSettingRoutes = (router: Router) => {
     router
         .route('/settings/')
         .get((req, res) => {
-            return models.Setting
+            return Setting
                 .findAll()
                 .then((settings) => {
                     if (!settings) {
@@ -45,13 +41,12 @@ const assignSettingRoutes = (router) => {
                 .catch(error => res.status(400).send(error));
         })
         .post((req, res) => {
-            const newSetting = populatedSetting(req.body);
-            return models.Setting
-                .upsert(newSetting)
+            return Setting
+                .upsert(req.body)
                 .then((wasCreated) => {
                     const settingToSend = Object.assign(
                         {},
-                        newSetting,
+                        req.body,
                         { action: wasCreated ? 'created' : 'updated' },
                     );
                     res.status(201).send(settingToSend);
@@ -62,7 +57,7 @@ const assignSettingRoutes = (router) => {
     router
         .route('/settings/:category/:groupName')
         .get((req, res) => {
-            return models.Setting
+            return Setting
                 .findOne({
                     attributes: ['data'],
                     where: whereCondition(req.params),
@@ -76,7 +71,7 @@ const assignSettingRoutes = (router) => {
                 .catch(error => res.status(400).send(error));
         })
         .patch((req, res) => {
-            return models.Setting
+            return Setting
                 .findOne({
                     where: whereCondition(req.params),
                 })

@@ -1,68 +1,86 @@
-/**
- * Assigns routes for Lead entities to the application router.
- */
-import models from '../models';
+/* @flow */
 
+/* Internal dependencies */
+import models from '../models';
+import { transformModifiers } from '../lib/transform-data';
+
+/* Types */
+import type { Router } from 'express';
+
+// TODO: Add comments to Lead routes helper methods.
+
+type LeadWithChildren = {
+    changes: Array<Object>,
+    messages: Array<Object>,
+    notes: Array<Object>,
+    createdBy: number | Object,
+    updatedBy: number | Object,
+};
+
+const { Change, Message, Lead, Note, User } = (models: Object);
 const notFoundMessage = { message: 'Lead not found' };
 
 const childrenInclusion = {
     include: [
         {
-            model: models.Change,
+            model: Change,
             as: 'changes',
         },
         {
-            model: models.Message,
+            model: Message,
             as: 'messages',
         },
         {
-            model: models.Note,
+            model: Note,
             as: 'notes',
         },
     ],
 };
 
-const getUpdatedEntity = (users, entity) => {
-    const creator = users.find(user => +user.id === +entity.createdBy);
-    const updater = users.find(user => +user.id === +entity.updatedBy);
-    if (creator) {
-        entity.createdBy = {
-            id: creator.id,
-            fullName: creator.fullName,
-        };
-    }
-    if (updater) {
-        entity.updatedBy = {
-            id: updater.id,
-            fullName: updater.fullName,
-        };
-    }
-    return entity;
+const transformLeadAndChildModifiers = (users, lead): LeadWithChildren => {
+    const { changes, messages, notes } = lead;
+    lead.changes = changes.map(
+        change => transformModifiers(users, change));
+    lead.messages = messages.map(
+        message => transformModifiers(users, message));
+    lead.notes = notes.map(
+        note => transformModifiers(users, note));
+    return transformModifiers(users, lead);
 };
 
-const updateUsersInInclusions = leads => new Promise((resolve, reject) => {
-    models.User.findAll().then((users) => {
-        leads.forEach((lead) => {
-            const { changes } = lead;
-            lead.changes = changes.map(
-                change => getUpdatedEntity(users, change));
-        });
-        resolve(leads);
+const transformModifiersForMultipleLeads = leads =>
+    new Promise((resolve, reject) => {
+        User.findAll()
+            .then((users) => {
+                const updatedLeads = leads.map(lead =>
+                    transformLeadAndChildModifiers(users, lead));
+                resolve(updatedLeads);
+            })
+            .catch(error => reject(error));
     });
-});
 
-const assignLeadRoutes = (router) => {
+const transformModifiersForSingleLead = lead =>
+    new Promise((resolve, reject) => {
+        User.findAll()
+            .then((users) => {
+                const updatedLead = transformLeadAndChildModifiers(users, lead);
+                resolve(updatedLead);
+            })
+            .catch(error => reject(error));
+    });
+
+const assignLeadRoutes = (router: Router) => {
     router
         .route('/leads/')
         .get((req, res) => {
-            return models.Lead
+            return Lead
                 .findAll(childrenInclusion)
-                .then(updateUsersInInclusions)
+                .then(transformModifiersForMultipleLeads)
                 .then(leads => res.status(200).send(leads))
                 .catch(error => res.status(400).send(error));
         })
         .post((req, res) => {
-            return models.Lead
+            return Lead
                 .create(req.body)
                 .then(lead => res.status(201).send(lead))
                 .catch(error => res.status(400).send(error));
@@ -71,8 +89,9 @@ const assignLeadRoutes = (router) => {
     router
         .route('/leads/:leadId')
         .get((req, res) => {
-            return models.Lead
+            return Lead
                 .findById(req.params.leadId, childrenInclusion)
+                .then(transformModifiersForSingleLead)
                 .then((lead) => {
                     if (!lead) {
                         return res.status(404).send(notFoundMessage);
@@ -82,8 +101,9 @@ const assignLeadRoutes = (router) => {
                 .catch(error => res.status(400).send(error));
         })
         .patch((req, res) => {
-            return models.Lead
+            return Lead
                 .findById(req.params.leadId, childrenInclusion)
+                .then(transformModifiersForSingleLead)
                 .then((lead) => {
                     if (!lead) {
                         return res.status(404).send(notFoundMessage);
@@ -96,8 +116,9 @@ const assignLeadRoutes = (router) => {
                 .catch(error => res.status(400).send(error));
         })
         .delete((req, res) => {
-            return models.Lead
+            return Lead
                 .findById(req.params.leadId, childrenInclusion)
+                .then(transformModifiersForSingleLead)
                 .then((lead) => {
                     if (!lead) {
                         return res.status(404).send(notFoundMessage);

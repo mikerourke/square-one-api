@@ -1,8 +1,12 @@
-/**
- * Assigns routes for User entities to the application router.
- */
+/* @flow */
+
+/* Internal dependencies */
 import models from '../models';
 
+/* Types */
+import type { Router } from 'express';
+
+const { User } = (models: Object);
 const notFoundMessage = { message: 'User not found' };
 
 /**
@@ -17,11 +21,11 @@ const whereCondition = entity => ({ username: entity.username });
  * Assigns routes to the Express Router instance associated with User models.
  * @param {Object} router Express router that routes are assigned to.
  */
-const assignUserRoutes = (router) => {
+const assignUserRoutes = (router: Router) => {
     router
         .route('/users/:username')
         .get((req, res) => {
-            return models.User
+            return User
                 .findOne({
                     where: whereCondition(req.params),
                 })
@@ -34,7 +38,7 @@ const assignUserRoutes = (router) => {
                 .catch(error => res.status(400).send(error));
         })
         .patch((req, res) => {
-            return models.User
+            return User
                 .findOne({
                     where: whereCondition(req.params),
                 })
@@ -53,7 +57,7 @@ const assignUserRoutes = (router) => {
     router
         .route('/users/:username/login')
         .patch((req, res) => {
-            return models.User
+            return User
                 .findOne({
                     where: whereCondition(req.params),
                 })
@@ -73,7 +77,7 @@ const assignUserRoutes = (router) => {
     router
         .route('/users/:username/logout')
         .patch((req, res) => {
-            return models.User
+            return User
                 .findOne({
                     where: whereCondition(req.params),
                 })

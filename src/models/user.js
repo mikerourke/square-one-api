@@ -1,8 +1,9 @@
+/* @flow */
+
 /* External dependencies */
 import bcrypt from 'bcrypt';
 
-
-const checkForSecurePassword = (user, options) =>
+const checkForSecurePassword = (user, options): Promise<*> =>
     new Promise((resolve, reject) => {
         if (user.password) {
             if (user.password !== user.passwordConfirmation) {
@@ -20,7 +21,7 @@ const checkForSecurePassword = (user, options) =>
         }
     });
 
-const userModel = (sequelize, DataTypes) =>
+const defineUser = (sequelize: Sequelize, DataTypes: DataTypes) =>
     sequelize.define('User', {
         username: {
             type: DataTypes.STRING,
@@ -72,7 +73,6 @@ const userModel = (sequelize, DataTypes) =>
             beforeCreate: (user, options) => {
                 return checkForSecurePassword(user, options);
             },
-
             beforeUpdate: (user, options) => {
                 return checkForSecurePassword(user, options);
             },
@@ -98,4 +98,4 @@ const userModel = (sequelize, DataTypes) =>
         },
     });
 
-export default userModel;
+export default defineUser;

@@ -1,5 +1,4 @@
-// TODO: Create ID generation code.
-// http://stackoverflow.com/questions/24131359/how-do-i-create-custom-sequence-in-postgresql-based-on-date-of-row-creation
+/* @flow */
 
 /* External dependencies */
 import fs from 'fs';

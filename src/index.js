@@ -1,7 +1,12 @@
+/* @flow */
+
+/* External dependencies */
 import path from 'path';
 import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
+
+/* Internal dependencies */
 import assignRoutes from './routes';
 
 const server = express();

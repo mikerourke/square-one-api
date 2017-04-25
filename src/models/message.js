@@ -4,8 +4,8 @@
 import getNextIdNumber from '../lib/id-generator';
 import sendTextMessages from '../lib/text-message';
 
-const messageModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
-    const Message = sequelize.define('Message', {
+const defineMessage = (sequelize: Sequelize, DataTypes: DataTypes) => {
+    const messageModel = sequelize.define('Message', {
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,
@@ -22,7 +22,7 @@ const messageModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
         freezeTableName: true,
         classMethods: {
             associate: (models) => {
-                Message.belongsTo(models.Lead, {
+                messageModel.belongsTo(models.Lead, {
                     foreignKey: 'parentId',
                     onDelete: 'CASCADE',
                 });
@@ -30,7 +30,7 @@ const messageModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
         },
         hooks: {
             beforeCreate: message => new Promise((resolve, reject) => {
-                getNextIdNumber(Message)
+                getNextIdNumber(messageModel)
                     .then((nextId) => {
                         message.id = nextId;
                         resolve();
@@ -53,7 +53,7 @@ const messageModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
             }),
         },
     });
-    return Message;
+    return messageModel;
 };
 
-export default messageModel;
+export default defineMessage;

@@ -1,11 +1,11 @@
 /* @flow */
 
 /* Internal dependencies */
+import { transformModifiers } from '../lib/transform-data';
 import getNextIdNumber from '../lib/id-generator';
-import { User } from './index';
 
-const changeModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
-    const Change = sequelize.define('Change', {
+const defineChange = (sequelize: Sequelize, DataTypes: DataTypes) => {
+    const changeModel = sequelize.define('Change', {
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,
@@ -22,7 +22,7 @@ const changeModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
         freezeTableName: true,
         classMethods: {
             associate: (models) => {
-                Change.belongsTo(models.Lead, {
+                changeModel.belongsTo(models.Lead, {
                     foreignKey: 'parentId',
                     onDelete: 'CASCADE',
                 });
@@ -30,7 +30,7 @@ const changeModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
         },
         hooks: {
             beforeCreate: change => new Promise((resolve, reject) => {
-                getNextIdNumber(Change)
+                getNextIdNumber(changeModel)
                     .then((nextId) => {
                         change.id = nextId;
                         resolve();
@@ -39,7 +39,7 @@ const changeModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
             }),
         },
     });
-    return Change;
-}
+    return changeModel;
+};
 
-export default changeModel;
+export default defineChange;

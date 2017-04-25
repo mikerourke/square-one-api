@@ -1,4 +1,6 @@
-const settingModel = (sequelize, DataTypes) =>
+/* @flow */
+
+const defineSetting = (sequelize: Sequelize, DataTypes: DataTypes) =>
     sequelize.define('Setting', {
         category: DataTypes.STRING,
         settingName: DataTypes.STRING,
@@ -14,4 +16,4 @@ const settingModel = (sequelize, DataTypes) =>
         ],
     });
 
-export default settingModel;
+export default defineSetting;

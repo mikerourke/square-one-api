@@ -3,8 +3,8 @@
 /* Internal dependencies */
 import getNextIdNumber from '../lib/id-generator';
 
-const leadModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
-    const Lead = sequelize.define('Lead', {
+const defineLead = (sequelize: Sequelize, DataTypes: DataTypes) => {
+    const leadModel = sequelize.define('Lead', {
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,
@@ -31,15 +31,15 @@ const leadModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
         freezeTableName: true,
         classMethods: {
             associate: (models) => {
-                Lead.hasMany(models.Change, {
+                leadModel.hasMany(models.Change, {
                     foreignKey: 'parentId',
                     as: 'changes',
                 });
-                Lead.hasMany(models.Message, {
+                leadModel.hasMany(models.Message, {
                     foreignKey: 'parentId',
                     as: 'messages',
                 });
-                Lead.hasMany(models.Note, {
+                leadModel.hasMany(models.Note, {
                     foreignKey: 'parentId',
                     as: 'notes',
                 });
@@ -47,7 +47,7 @@ const leadModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
         },
         hooks: {
             beforeCreate: lead => new Promise((resolve, reject) => {
-                getNextIdNumber(Lead)
+                getNextIdNumber(leadModel)
                     .then((nextId) => {
                         lead.id = nextId;
                         resolve();
@@ -56,7 +56,7 @@ const leadModel = (sequelize: Sequelize, DataTypes: DataTypes) => {
             }),
         },
     });
-    return Lead;
+    return leadModel;
 };
 
-export default leadModel;
+export default defineLead;

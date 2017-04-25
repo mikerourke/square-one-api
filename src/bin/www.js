@@ -1,3 +1,5 @@
+/* @flow */
+
 /* External dependencies */
 import http from 'http';
 
