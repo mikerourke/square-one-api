@@ -1,13 +1,14 @@
 /* External dependencies */
+import moment from 'moment';
 import SequelizeMock from 'sequelize-mock';
 
 /* Internal dependencies */
-import getNextIdNumber, { currentDateIdElement } from '../index';
+import getNextIdNumber from '../index';
 
 let LeadMock;
 
 const getIdForTesting = () => {
-    const dateElements = currentDateIdElement();
+    const dateElements = moment().format('YYMMDD');
     const idAsString = `101${dateElements}0001`;
     return +idAsString;
 };

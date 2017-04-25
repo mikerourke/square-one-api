@@ -1,39 +1,9 @@
 /* @flow */
 
+/* External dependencies */
+import moment from 'moment';
+
 let entityModel;
-
-/**
- * Ensures the date element that is part of the ID number is two digits long,
- *      so if the current month is April (4), the ID number will have '04' in
- *      the month placeholder.
- * @param {string} dateElement Month or day to update (if required).
- * @returns {string} Month or day with two digits.
- */
-const getTwoDigitDate = (dateElement: string): string => {
-    if (dateElement.length === 1) {
-        return `0${dateElement}`;
-    }
-    return dateElement;
-};
-
-/**
- * Returns the date portion of the ID number based on the current date in the
- *      format YYMMDD.  This is the part of the ID after the 3 digit prefix,
- *      so 4/20/2017 would be 170420 in the ID number.
- * @returns {string} Date portion of the ID number.
- */
-export const currentDateIdElement = (): string => {
-    const dateForFormat = new Date();
-    const twoDigitYear = dateForFormat.getFullYear().toString();
-    const currentMonth = (dateForFormat.getMonth() + 1).toString();
-    const currentDay = dateForFormat.getDate().toString();
-
-    const yearForId = twoDigitYear.substring(2, 4);
-    const monthForId = getTwoDigitDate(currentMonth);
-    const dayForId = getTwoDigitDate(currentDay);
-
-    return `${yearForId}${monthForId}${dayForId}`;
-};
 
 /**
  * Gets the last ID number in the table for the corresponding model and breaks
@@ -66,7 +36,7 @@ const calculateNextId = (): Promise<*> =>
         getElementsOfLastId()
             .then((idElements) => {
                 const { prefix, dateCreated, sequence } = idElements;
-                const dateForId = currentDateIdElement();
+                const dateForId = moment().format('YYMMDD');
                 let sequenceForId = '0000';
                 if (dateForId === dateCreated) {
                     sequenceForId = sequence;

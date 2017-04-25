@@ -7,6 +7,7 @@ import { Router } from 'express';
 import assignChangeRoutes from './changes';
 import assignLeadRoutes from './leads';
 import assignMessageRoutes from './messages';
+import assignNoteRoutes from './notes';
 import assignSettingRoutes from './settings';
 import assignUserRoutes from './users';
 
@@ -21,6 +22,7 @@ const assignRoutes = (server: ExpressRouter) => {
     assignLeadRoutes(router);
     assignChangeRoutes(router);
     assignMessageRoutes(router);
+    assignNoteRoutes(router);
     assignSettingRoutes(router);
     assignUserRoutes(router);
     server.use('/api', router);

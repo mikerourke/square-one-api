@@ -2,6 +2,7 @@
 
 /* Internal dependencies */
 import getNextIdNumber from '../lib/id-generator';
+import { getTransformedModifiers } from '../lib/entity-modifications';
 
 const defineLead = (sequelize: Sequelize, DataTypes: DataTypes) => {
     const leadModel = sequelize.define('Lead', {
@@ -54,6 +55,7 @@ const defineLead = (sequelize: Sequelize, DataTypes: DataTypes) => {
                     })
                     .catch(error => reject(error));
             }),
+            afterFind: result => getTransformedModifiers(result),
         },
     });
     return leadModel;

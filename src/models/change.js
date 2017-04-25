@@ -1,7 +1,6 @@
 /* @flow */
 
 /* Internal dependencies */
-import { transformModifiers } from '../lib/transform-data';
 import getNextIdNumber from '../lib/id-generator';
 
 const defineChange = (sequelize: Sequelize, DataTypes: DataTypes) => {
@@ -37,6 +36,12 @@ const defineChange = (sequelize: Sequelize, DataTypes: DataTypes) => {
                     })
                     .catch(error => reject(error));
             }),
+            afterFind: result => new Promise((resolve, reject) => {
+                resolve();
+            }),
+        },
+        scopes: {
+            inParent: parentId => ({ where: { parentId } }),
         },
     });
     return changeModel;

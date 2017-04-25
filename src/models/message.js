@@ -52,6 +52,9 @@ const defineMessage = (sequelize: Sequelize, DataTypes: DataTypes) => {
                     .catch(error => reject(error));
             }),
         },
+        scopes: {
+            inParent: parentId => ({ where: { parentId } }),
+        },
     });
     return messageModel;
 };

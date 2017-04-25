@@ -35,6 +35,9 @@ const defineNote = (sequelize: Sequelize, DataTypes: DataTypes) => {
                     .catch(error => reject(error));
             }),
         },
+        scopes: {
+            inParent: parentId => ({ where: { parentId } }),
+        },
     });
     return noteModel;
 };
