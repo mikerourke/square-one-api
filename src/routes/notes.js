@@ -24,7 +24,6 @@ const assignNoteRoutes = (router: Router) => {
         .get((req, res) => {
             return Note.scope({ method: ['inParent', req.params.leadId] })
                 .findAll()
-                .then(getTransformedModifiers)
                 .then((notes) => {
                     if (!notes) {
                         return res.status(404).send(notFoundMessage);
@@ -34,13 +33,11 @@ const assignNoteRoutes = (router: Router) => {
                 .catch(error => res.status(400).send(error));
         })
         .post((req, res) => {
+            const newEntity = Object.assign({}, req.body, {
+                parentId: req.params.leadId,
+            });
             return Note
-                .create(Object.assign({}, req.body, {
-                    parentId: req.params.leadId,
-                }), { 
-                    fields: getFieldsForCreate(req.body).concat('parentId'),
-                })
-                .then(getTransformedModifiers)
+                .create(newEntity, { fields: getFieldsForCreate(newEntity) })
                 .then(note => res.status(201).send(note))
                 .catch(error => res.status(400).send(error));
         });
@@ -50,7 +47,6 @@ const assignNoteRoutes = (router: Router) => {
         .get((req, res) => {
             return Note
                 .findById(req.params.noteId)
-                .then(getTransformedModifiers)
                 .then((note) => {
                     if (!note) {
                         return res.status(404).send(notFoundMessage);
@@ -79,7 +75,6 @@ const assignNoteRoutes = (router: Router) => {
         .delete((req, res) => {
             return Note
                 .findById(req.params.noteId)
-                .then(getTransformedModifiers)
                 .then((note) => {
                     if (!note) {
                         return res.status(404).send(notFoundMessage);

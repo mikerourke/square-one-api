@@ -37,7 +37,6 @@ const assignLeadRoutes = (router: Router) => {
         .get((req, res) => {
             return Lead
                 .findAll(childrenInclusion)
-                .then(getTransformedModifiers)
                 .then(leads => res.status(200).send(leads))
                 .catch(error => res.status(400).send(error));
         })
@@ -46,7 +45,6 @@ const assignLeadRoutes = (router: Router) => {
                 .create(req.body, {
                     fields: getFieldsForCreate(req.body),
                 })
-                .then(getTransformedModifiers)
                 .then(lead => res.status(201).send(lead))
                 .catch(error => res.status(400).send(error));
         });
@@ -56,7 +54,6 @@ const assignLeadRoutes = (router: Router) => {
         .get((req, res) => {
             return Lead
                 .findById(req.params.leadId, childrenInclusion)
-                .then(getTransformedModifiers)
                 .then((lead) => {
                     if (!lead) {
                         return res.status(404).send(notFoundMessage);
@@ -85,14 +82,13 @@ const assignLeadRoutes = (router: Router) => {
         .delete((req, res) => {
             return Lead
                 .findById(req.params.leadId, childrenInclusion)
-                .then(getTransformedModifiers)
                 .then((lead) => {
                     if (!lead) {
                         return res.status(404).send(notFoundMessage);
                     }
                     return lead
                         .destroy()
-                        .then(() => res.status(204).send())
+                        .then(() => res.status(204).send(lead))
                         .catch(error => res.status(400).send(error));
                 })
                 .catch(error => res.status(400).send(error));

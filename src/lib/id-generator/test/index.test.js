@@ -17,7 +17,7 @@ describe('ID Generator', () => {
     before((done) => {
         const idForTesting = getIdForTesting();
         const dbMock = new SequelizeMock();
-        LeadMock = dbMock.define('lead', {
+        LeadMock = dbMock.define('Lead', {
             id: idForTesting,
             name: ''
         });

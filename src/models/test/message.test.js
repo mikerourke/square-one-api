@@ -1,15 +1,15 @@
 /* Internal dependencies */
 import db from '../index';
 
-describe.skip('Message Model', () => {
+describe('Message Model', () => {
     const messageInstance = {
         messageType: 'text',
         recipient: process.env.MY_PHONE_NUMBER,
         subject: 'Subject for Test',
         body: 'This is a message for testing.',
-        createdBy: 4,
+        createdBy: 1,
         createdAt: '2017-04-20 20:00:00',
-        updatedBy: 4,
+        updatedBy: 1,
         updatedAt: '2017-04-20 20:00:00'
     };
 

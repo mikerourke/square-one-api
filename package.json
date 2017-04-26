@@ -4,7 +4,8 @@
   "description": "API for the lead tracking and resource management system.",
   "scripts": {
     "build": "node internals/scripts/build.js",
-    "db:setup": "node internals/database/setup.js",
+    "db:populate": "babel-node internals/database/populate.js",
+    "flow": "flow check || exit 0",
     "lint": "esw src tools --color || exit 0",
     "lint:watch": "npm run lint --watch",
     "setup": "rm -rf node_modules && yarn cache clean && yarn install",

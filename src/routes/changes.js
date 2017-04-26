@@ -2,10 +2,7 @@
 
 /* Internal dependencies */
 import models from '../models';
-import {
-    getFieldsForCreate,
-    getTransformedModifiers,
-} from '../lib/entity-modifications';
+import { getFieldsForCreate } from '../lib/entity-modifications';
 
 /* Types */
 import type { Router } from 'express';
@@ -23,7 +20,6 @@ const assignChangeRoutes = (router: Router) => {
         .get((req, res) => {
             return Change.scope({ method: ['inParent', req.params.leadId] })
                 .findAll()
-                .then(getTransformedModifiers)
                 .then((changes) => {
                     if (!changes) {
                         return res.status(404).send(notFoundMessage);
@@ -33,13 +29,11 @@ const assignChangeRoutes = (router: Router) => {
                 .catch(error => res.status(400).send(error));
         })
         .post((req, res) => {
+            const newEntity = Object.assign({}, req.body, {
+                parentId: req.params.leadId,
+            });
             return Change
-                .create(Object.assign({}, req.body, {
-                    parentId: req.params.leadId,
-                }), { 
-                    fields: getFieldsForCreate(req.body).concat('parentId'),
-                })
-                .then(getTransformedModifiers)
+                .create(newEntity, { fields: getFieldsForCreate(newEntity) })
                 .then(change => res.status(201).send(change))
                 .catch(error => res.status(400).send(error));
         });

@@ -1,8 +1,12 @@
 /* @flow */
 
 /* Internal dependencies */
-import getNextIdNumber from '../lib/id-generator';
 import { getTransformedModifiers } from '../lib/entity-modifications';
+import {
+    getEmailValidation,
+    getPhoneValidation,
+} from '../lib/validations';
+import getNextIdNumber from '../lib/id-generator';
 
 const defineLead = (sequelize: Sequelize, DataTypes: DataTypes) => {
     const leadModel = sequelize.define('Lead', {
@@ -14,11 +18,8 @@ const defineLead = (sequelize: Sequelize, DataTypes: DataTypes) => {
         contactName: DataTypes.STRING,
         source: DataTypes.STRING,
         leadFee: DataTypes.FLOAT,
-        phone: DataTypes.STRING,
-        email: {
-            type: DataTypes.STRING,
-            validate: { isEmail: true },
-        },
+        phone: getPhoneValidation.call(this, DataTypes),
+        email: getEmailValidation.call(this, DataTypes),
         address: DataTypes.STRING,
         lat: DataTypes.DECIMAL,
         lng: DataTypes.DECIMAL,
@@ -55,6 +56,7 @@ const defineLead = (sequelize: Sequelize, DataTypes: DataTypes) => {
                     })
                     .catch(error => reject(error));
             }),
+            afterCreate: lead => getTransformedModifiers(lead),
             afterFind: result => getTransformedModifiers(result),
         },
     });

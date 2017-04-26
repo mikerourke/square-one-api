@@ -1,0 +1,103 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "mike",
+      "fullName": "Mike Testing",
+      "phone": "1234567890",
+      "email": "mike@testing.com",
+      "title": "Warlock",
+      "isLoggedIn": "false",
+      "password": "mike",
+      "accessLevel": "admin"
+    },
+    {
+      "id": 2,
+      "username": "lis",
+      "fullName": "Elisabeth Testing",
+      "phone": "1234567890",
+      "email": "lis@testing.com",
+      "title": "Bookkeeper",
+      "isLoggedIn": "false",
+      "password": "lis",
+      "accessLevel": "office"
+    },
+    {
+      "id": 3,
+      "username": "joe",
+      "fullName": "Joe Legend",
+      "phone": "1234567890",
+      "email": "joe@testing.com",
+      "title": "President",
+      "isLoggedIn": "false",
+      "password": "joe",
+      "accessLevel": "office"
+    },
+    {
+      "id": 4,
+      "username": "josh",
+      "fullName": "Josh Legend",
+      "phone": "1234567890",
+      "email": "josh@testing.com",
+      "title": "President",
+      "isLoggedIn": "false",
+      "password": "josh",
+      "accessLevel": "office"
+    }
+  ],
+  "settings": [
+    {
+      "id": 1,
+      "category": "lists",
+      "settingName": "sources",
+      "data": [
+        "Did work in area",
+        "Facebook",
+        "Flyer",
+        "HomeAdvisor",
+        "Saw Sign"
+      ]
+    },
+    {
+      "id": 2,
+      "category": "lists",
+      "settingName": "leadStatuses",
+      "data": [
+        "New",
+        "Selling",
+        "Won",
+        "Qualified",
+        "Lost"
+      ]
+    },
+    {
+      "id": 3,
+      "category": "general",
+      "settingName": "companyInfo",
+      "data": {
+        "companyName": "Legend",
+        "address": "123 Company Lane",
+        "phone": "(630) 123-5555"
+      }
+    },
+    {
+      "id": 4,
+      "category": "lists",
+      "settingName": "representatives",
+      "data": [
+        "Scott",
+        "Chuckles",
+        "Biscuits"
+      ]
+    },
+    {
+      "id": 5,
+      "category": "lists",
+      "settingName": "textTemplates",
+      "data": [
+        "Hello, [leadName], you will be hearing from [assignTo] soon.",
+        "A representative will be contacting you shortly."
+      ]
+    }
+  ]
+}

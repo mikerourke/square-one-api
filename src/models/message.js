@@ -1,6 +1,7 @@
 /* @flow */
 
 /* Internal dependencies */
+import { getTransformedModifiers } from '../lib/entity-modifications';
 import getNextIdNumber from '../lib/id-generator';
 import sendTextMessages from '../lib/text-message';
 
@@ -37,10 +38,6 @@ const defineMessage = (sequelize: Sequelize, DataTypes: DataTypes) => {
                     })
                     .catch(error => reject(error));
             }),
-            /**
-             * Send text message to the user using the Twilio API after the
-             *      database record is created.
-             */
             afterCreate: message => new Promise((resolve, reject) => {
                 const { recipient, body } = message;
                 const messageToSend = {
@@ -48,9 +45,12 @@ const defineMessage = (sequelize: Sequelize, DataTypes: DataTypes) => {
                     to: recipient,
                 };
                 sendTextMessages([messageToSend])
-                    .then(() => resolve())
+                    .then(() => getTransformedModifiers(message)
+                        .then(results => resolve(results))
+                        .catch(() => resolve(message)))
                     .catch(error => reject(error));
             }),
+            afterFind: result => getTransformedModifiers(result),
         },
         scopes: {
             inParent: parentId => ({ where: { parentId } }),

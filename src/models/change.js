@@ -1,6 +1,7 @@
 /* @flow */
 
 /* Internal dependencies */
+import { getTransformedModifiers } from '../lib/entity-modifications';
 import getNextIdNumber from '../lib/id-generator';
 
 const defineChange = (sequelize: Sequelize, DataTypes: DataTypes) => {
@@ -36,9 +37,8 @@ const defineChange = (sequelize: Sequelize, DataTypes: DataTypes) => {
                     })
                     .catch(error => reject(error));
             }),
-            afterFind: result => new Promise((resolve, reject) => {
-                resolve();
-            }),
+            afterCreate: change => getTransformedModifiers(change),
+            afterFind: result => getTransformedModifiers(result),
         },
         scopes: {
             inParent: parentId => ({ where: { parentId } }),

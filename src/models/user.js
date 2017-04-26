@@ -3,6 +3,12 @@
 /* External dependencies */
 import bcrypt from 'bcrypt';
 
+/* Internal dependencies */
+import {
+    getEmailValidation,
+    getPhoneValidation,
+} from '../lib/validations';
+
 const checkForSecurePassword = (user, options): Promise<*> =>
     new Promise((resolve, reject) => {
         if (user.password) {
@@ -32,18 +38,8 @@ const defineUser = (sequelize: Sequelize, DataTypes: DataTypes) =>
             },
         },
         fullName: DataTypes.STRING,
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            set: function set(value) {
-                this.setDataValue('email', value.toLowerCase());
-            },
-            validate: {
-                isEmail: true,
-                notEmpty: true,
-                len: [1, 255],
-            },
-        },
+        phone: getPhoneValidation.call(this, DataTypes),
+        email: getEmailValidation.call(this, DataTypes),
         title: DataTypes.STRING,
         isLoggedIn: {
             type: DataTypes.BOOLEAN,
