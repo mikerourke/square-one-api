@@ -1,5 +1,8 @@
 /* @flow */
 
+// Setup environment variables:
+require('dotenv').config();
+
 /* External dependencies */
 import http from 'http';
 

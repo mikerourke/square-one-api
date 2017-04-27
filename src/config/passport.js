@@ -5,14 +5,13 @@
 
 /* External dependencies */
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import { sign } from 'jsonwebtoken';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 
 /* Internal dependencies */
 import models from '../models';
 
-const { secret } = require('../config/config.json');
+const secret = process.env.AUTH_SECRET;
 
 const { User } = (models: Object);
 const localOptions = { usernameField: 'username' };
@@ -46,7 +45,3 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
 
 passport.use(jwtLogin);
 passport.use(localLogin);
-
-const generateToken = (user: Object) => sign(user, secret, {
-    expiresIn: 10080,
-});
