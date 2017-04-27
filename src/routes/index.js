@@ -12,12 +12,12 @@ import assignSettingRoutes from './settings';
 import assignUserRoutes from './users';
 
 /* Types */
-import type { Router as ExpressRouter } from 'express';
+import type { Application } from 'express';
 
 /**
  * Assigns handlers to the application router for each entity type.
  */
-const assignRoutes = (server: ExpressRouter) => {
+const assignRoutes = (app: Application) => {
     const router = Router();
     assignLeadRoutes(router);
     assignChangeRoutes(router);
@@ -25,7 +25,7 @@ const assignRoutes = (server: ExpressRouter) => {
     assignNoteRoutes(router);
     assignSettingRoutes(router);
     assignUserRoutes(router);
-    server.use('/api', router);
+    app.use('/api', router);
 };
 
 export default assignRoutes;

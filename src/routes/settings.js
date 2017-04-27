@@ -4,7 +4,7 @@
 import models from '../models';
 
 /* Types */
-import type { Router } from 'express';
+import type { Router, Request, Response } from 'express';
 
 const { Setting } = (models: Object);
 const notFoundMessage = { message: 'Setting not found' };
@@ -29,7 +29,7 @@ const whereCondition = (entity) => {
 const assignSettingRoutes = (router: Router) => {
     router
         .route('/settings/')
-        .get((req, res) => {
+        .get((req: Request, res: Response) => {
             return Setting
                 .findAll()
                 .then((settings) => {
@@ -40,15 +40,14 @@ const assignSettingRoutes = (router: Router) => {
                 })
                 .catch(error => res.status(400).send(error));
         })
-        .post((req, res) => {
+        .post((req: Request, res: Response) => {
             return Setting
                 .upsert(req.body)
                 .then((wasCreated) => {
-                    const settingToSend = Object.assign(
-                        {},
-                        req.body,
-                        { action: wasCreated ? 'created' : 'updated' },
-                    );
+                    const { body = {} } = req;
+                    const settingToSend = Object.assign({}, body, {
+                        action: wasCreated ? 'created' : 'updated',
+                    });
                     res.status(201).send(settingToSend);
                 })
                 .catch(error => res.status(400).send(error));
@@ -56,7 +55,7 @@ const assignSettingRoutes = (router: Router) => {
 
     router
         .route('/settings/:category/:groupName')
-        .get((req, res) => {
+        .get((req: Request, res: Response) => {
             return Setting
                 .findOne({
                     attributes: ['data'],
@@ -70,7 +69,7 @@ const assignSettingRoutes = (router: Router) => {
                 })
                 .catch(error => res.status(400).send(error));
         })
-        .patch((req, res) => {
+        .patch((req: Request, res: Response) => {
             return Setting
                 .findOne({
                     where: whereCondition(req.params),

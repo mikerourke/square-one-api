@@ -66,12 +66,10 @@ const defineUser = (sequelize: Sequelize, DataTypes: DataTypes) =>
         tableName: 'users',
         freezeTableName: true,
         hooks: {
-            beforeCreate: (user, options) => {
-                return checkForSecurePassword(user, options);
-            },
-            beforeUpdate: (user, options) => {
-                return checkForSecurePassword(user, options);
-            },
+            beforeCreate: (user, options) =>
+                checkForSecurePassword(user, options),
+            beforeUpdate: (user, options) =>
+                checkForSecurePassword(user, options),
         },
         indexes: [
             {

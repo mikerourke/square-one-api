@@ -4,7 +4,7 @@
 import models from '../models';
 
 /* Types */
-import type { Router } from 'express';
+import type { Router, Request, Response } from 'express';
 
 const { User } = (models: Object);
 const notFoundMessage = { message: 'User not found' };
@@ -24,7 +24,7 @@ const whereCondition = entity => ({ username: entity.username });
 const assignUserRoutes = (router: Router) => {
     router
         .route('/users/:username')
-        .get((req, res) => {
+        .get((req: Request, res: Response) => {
             return User
                 .findOne({
                     where: whereCondition(req.params),
@@ -37,7 +37,7 @@ const assignUserRoutes = (router: Router) => {
                 })
                 .catch(error => res.status(400).send(error));
         })
-        .patch((req, res) => {
+        .patch((req: Request, res: Response) => {
             return User
                 .findOne({
                     where: whereCondition(req.params),
@@ -56,7 +56,7 @@ const assignUserRoutes = (router: Router) => {
 
     router
         .route('/users/:username/login')
-        .patch((req, res) => {
+        .patch((req: Request, res: Response) => {
             return User
                 .findOne({
                     where: whereCondition(req.params),
@@ -76,7 +76,7 @@ const assignUserRoutes = (router: Router) => {
 
     router
         .route('/users/:username/logout')
-        .patch((req, res) => {
+        .patch((req: Request, res: Response) => {
             return User
                 .findOne({
                     where: whereCondition(req.params),

@@ -9,7 +9,7 @@ import {
 } from '../lib/entity-modifications';
 
 /* Types */
-import type { Router } from 'express';
+import type { Router, Request, Response } from 'express';
 
 const { Note } = (models: Object);
 const notFoundMessage = { message: 'Note not found' };
@@ -21,7 +21,7 @@ const notFoundMessage = { message: 'Note not found' };
 const assignNoteRoutes = (router: Router) => {
     router
         .route('/leads/:leadId/notes')
-        .get((req, res) => {
+        .get((req: Request, res: Response) => {
             return Note.scope({ method: ['inParent', req.params.leadId] })
                 .findAll()
                 .then((notes) => {
@@ -32,9 +32,10 @@ const assignNoteRoutes = (router: Router) => {
                 })
                 .catch(error => res.status(400).send(error));
         })
-        .post((req, res) => {
-            const newEntity = Object.assign({}, req.body, {
-                parentId: req.params.leadId,
+        .post((req: Request, res: Response) => {
+            const { body = {}, params: { leadId = 0 } } = (req: Object);
+            const newEntity = Object.assign({}, body, {
+                parentId: leadId,
             });
             return Note
                 .create(newEntity, { fields: getFieldsForCreate(newEntity) })
@@ -44,7 +45,7 @@ const assignNoteRoutes = (router: Router) => {
 
     router
         .route('/leads/:leadId/notes/:noteId')
-        .get((req, res) => {
+        .get((req: Request, res: Response) => {
             return Note
                 .findById(req.params.noteId)
                 .then((note) => {
@@ -55,7 +56,7 @@ const assignNoteRoutes = (router: Router) => {
                 })
                 .catch(error => res.status(400).send(error));
         })
-        .patch((req, res) => {
+        .patch((req: Request, res: Response) => {
             return Note
                 .findById(req.params.noteId)
                 .then((note) => {
@@ -72,7 +73,7 @@ const assignNoteRoutes = (router: Router) => {
                 })
                 .catch(error => res.status(400).send(error));
         })
-        .delete((req, res) => {
+        .delete((req: Request, res: Response) => {
             return Note
                 .findById(req.params.noteId)
                 .then((note) => {

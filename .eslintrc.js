@@ -73,7 +73,7 @@ module.exports = {
         'no-trailing-spaces': 'off',
         'eol-last': 'off',
         'no-unused-vars': 'warn',
-        'no-underscore-dangle': 'error',
+        'no-underscore-dangle': 'off',
         'no-alert': 'off',
         'no-lone-blocks': 'off'
     }

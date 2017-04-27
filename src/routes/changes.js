@@ -5,7 +5,7 @@ import models from '../models';
 import { getFieldsForCreate } from '../lib/entity-modifications';
 
 /* Types */
-import type { Router } from 'express';
+import type { Router, Request, Response } from 'express';
 
 const { Change } = (models: Object);
 const notFoundMessage = { message: 'Change not found' };
@@ -17,7 +17,7 @@ const notFoundMessage = { message: 'Change not found' };
 const assignChangeRoutes = (router: Router) => {
     router
         .route('/leads/:leadId/changes')
-        .get((req, res) => {
+        .get((req: Request, res: Response) => {
             return Change.scope({ method: ['inParent', req.params.leadId] })
                 .findAll()
                 .then((changes) => {
@@ -28,9 +28,10 @@ const assignChangeRoutes = (router: Router) => {
                 })
                 .catch(error => res.status(400).send(error));
         })
-        .post((req, res) => {
-            const newEntity = Object.assign({}, req.body, {
-                parentId: req.params.leadId,
+        .post((req: Request, res: Response) => {
+            const { body = {}, params: { leadId = 0 } } = req;
+            const newEntity = Object.assign({}, body, {
+                parentId: leadId,
             });
             return Change
                 .create(newEntity, { fields: getFieldsForCreate(newEntity) })

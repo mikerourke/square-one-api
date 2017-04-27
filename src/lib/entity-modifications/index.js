@@ -4,16 +4,16 @@
 import models from '../../models';
 
 /* Types */
-type ModifyingUser = {
+export type ModifyingUser = {
     id: number,
     username?: string,
     fullName?: string,
 };
 
-type Entity = {
+export type Entity = {
     id?: number,
-    createdBy: number | ModifyingUser,
-    updatedBy: number | ModifyingUser,
+    createdBy?: number | ModifyingUser,
+    updatedBy?: number | ModifyingUser,
 };
 
 /**
@@ -71,8 +71,7 @@ const transformChildModifiers = (
 ): Entity => {
     Object.entries(parentEntity).forEach(([key, value]) => {
         if (Array.isArray(value)) {
-            const childEntities = value;
-            parentEntity[key] = childEntities.map(childEntity =>
+            parentEntity[key] = value.map((childEntity: any) =>
                 transformModifiers(users, childEntity));
         }
     });
@@ -87,7 +86,7 @@ const transformChildModifiers = (
  * @returns {Promise} Promise with updated data as the resolution.
  */
 export const getTransformedModifiers = (
-    dataToTransform: entity | Array<Entity>,
+    dataToTransform: Entity | Array<Entity>,
 ): Promise<*> => new Promise((resolve, reject) => {
     /*
      * It's possible that the find operation that is called before this 
@@ -104,9 +103,11 @@ export const getTransformedModifiers = (
             // If only one entity was found, add to an array of 1 element to
             // avoid writing duplicate code to perform transformation.
             const isDataArray = (Array.isArray(dataToTransform));
-            let entities = dataToTransform;
-            if (!isDataArray) {
-                entities = [dataToTransform];
+            let entities: Array<Entity> = [];
+            if (Array.isArray(dataToTransform)) {
+                entities = dataToTransform;
+            } else {
+                entities = Array.of(dataToTransform);
             }
 
             const transformedData = entities.map((entity) => {
@@ -138,7 +139,6 @@ export const getFieldsForUpdate = (entity: Entity): Array<string> =>
  * Loops through the fields in the entity and return an array of values that
  *      should be passed in to the create action for a Model instance.
  * @param {Entity} entity Entity to get fields for.
- * @param {Array} [otherFields] Optional additional fields to include.
  * @returns {Array} Array of fields for create action.
  */
 export const getFieldsForCreate = (entity: Entity): Array<string> =>

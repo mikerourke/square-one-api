@@ -9,7 +9,7 @@ import {
 } from '../lib/entity-modifications';
 
 /* Types */
-import type { Router } from 'express';
+import type { Router, Request, Response } from 'express';
 
 const { Change, Message, Lead, Note } = (models: Object);
 const notFoundMessage = { message: 'Lead not found' };
@@ -31,16 +31,20 @@ const childrenInclusion = {
     ],
 };
 
+/**
+ * Assigns routes to the Express Router instance associated with Lead models.
+ * @param {Object} router Express router that routes are assigned to.
+ */
 const assignLeadRoutes = (router: Router) => {
     router
         .route('/leads')
-        .get((req, res) => {
+        .get((req: Request, res: Response) => {
             return Lead
                 .findAll(childrenInclusion)
                 .then(leads => res.status(200).send(leads))
                 .catch(error => res.status(400).send(error));
         })
-        .post((req, res) => {
+        .post((req: Request, res: Response) => {
             return Lead
                 .create(req.body, {
                     fields: getFieldsForCreate(req.body),
@@ -51,7 +55,7 @@ const assignLeadRoutes = (router: Router) => {
 
     router
         .route('/leads/:leadId')
-        .get((req, res) => {
+        .get((req: Request, res: Response) => {
             return Lead
                 .findById(req.params.leadId, childrenInclusion)
                 .then((lead) => {
@@ -62,7 +66,7 @@ const assignLeadRoutes = (router: Router) => {
                 })
                 .catch(error => res.status(400).send(error));
         })
-        .patch((req, res) => {
+        .patch((req: Request, res: Response) => {
             return Lead
                 .findById(req.params.leadId, childrenInclusion)
                 .then((lead) => {
@@ -79,7 +83,7 @@ const assignLeadRoutes = (router: Router) => {
                 })
                 .catch(error => res.status(400).send(error));
         })
-        .delete((req, res) => {
+        .delete((req: Request, res: Response) => {
             return Lead
                 .findById(req.params.leadId, childrenInclusion)
                 .then((lead) => {

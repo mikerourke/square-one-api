@@ -6,7 +6,7 @@
 export const getEmailValidation = (DataTypes: DataTypes) => ({
     type: DataTypes.STRING,
     allowNull: false,
-    set: function set(value) {
+    set: function set(value: string) {
         this.setDataValue('email', value.toLowerCase());
     },
     validate: {
