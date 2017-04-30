@@ -24,7 +24,7 @@ const getElementsOfLastId = (): Promise<*> =>
                 };
                 resolve(idElements);
             })
-            .catch(error => reject(error));
+            .catch(err => reject(err));
     });
 
 /**
@@ -45,7 +45,7 @@ const calculateNextId = (): Promise<*> =>
                 const lastIdNumber = +idString;
                 resolve(lastIdNumber + 1);
             })
-            .catch(error => reject(error));
+            .catch(err => reject(err));
     });
 
 /**
@@ -58,7 +58,7 @@ const getNextIdNumber = (modelForEntity: Object): Promise<*> =>
         entityModel = modelForEntity;
         calculateNextId()
             .then(nextId => resolve(nextId))
-            .catch(error => reject(error));
+            .catch(err => reject(err));
     });
 
 export default getNextIdNumber;

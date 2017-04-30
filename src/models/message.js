@@ -36,7 +36,7 @@ const defineMessage = (sequelize: Sequelize, DataTypes: DataTypes) => {
                         message.id = nextId;
                         resolve();
                     })
-                    .catch(error => reject(error));
+                    .catch(err => reject(err));
             }),
             afterCreate: message => new Promise((resolve, reject) => {
                 const { recipient, body } = message;
@@ -48,7 +48,7 @@ const defineMessage = (sequelize: Sequelize, DataTypes: DataTypes) => {
                     .then(() => getTransformedModifiers(message)
                         .then(results => resolve(results))
                         .catch(() => resolve(message)))
-                    .catch(error => reject(error));
+                    .catch(err => reject(err));
             }),
             afterFind: result => getTransformedModifiers(result),
         },

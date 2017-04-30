@@ -6,7 +6,7 @@ import {
     getTransformedModifiers
 } from '../index';
 
-describe.only('Entity Modifications', () => {
+describe('Entity Modifications', () => {
     let changeFromDb;
 
     before((done) => {
@@ -15,8 +15,8 @@ describe.only('Entity Modifications', () => {
                 .then((change) => {
                     changeFromDb = change;
                     done();
-                }).catch(error => done(error));
-        }).catch(error => done(error));
+                }).catch(err => done(err));
+        }).catch(err => done(err));
     });
 
     const expectedFields = [
@@ -61,7 +61,7 @@ describe.only('Entity Modifications', () => {
                 expect(createdBy).to.eql(expectedResult);
                 expect(updatedBy).to.eql(expectedResult);
                 done();
-            }).catch(error => done(error));
+            }).catch(err => done(err));
     });
 
     it('gracefully handles transforming invalid modifiers', (done) => {
@@ -75,6 +75,6 @@ describe.only('Entity Modifications', () => {
                 expect(createdBy).to.equal(2);
                 expect(updatedBy).to.equal(2);
                 done();
-            }).catch(error => done(error));
+            }).catch(err => done(err));
     });
 });

@@ -1,33 +1,27 @@
+/* Internal dependencies */
 import db from '../index';
-
-// TODO: Fix this test to accommodate for model updates.
 
 describe('User Model', () => {
     let user;
     const userInstance = {
         username: 'tester',
-        firstName: 'John Testinghouse',
+        fullName: 'John Testinghouse',
+        phone: '1234567890',
         email: 'jt@website.com',
         title: 'Test Person',
         isLoggedIn: false,
-        accessLevel: 'admin',
+        role: 'admin',
         password: '1234567',
         passwordConfirmation: '1234567',
     };
 
     before((done) => {
-        db.sequelize.sync().then(() => {
-            db.User.max('id').then((max) => {
-                db.User.destroy({
-                    where: { id: max },
-                });
-                done();
-            });
-        })
+        db.sequelize.sync().then(() => done());
     });
 
     describe('User Field Validation', () => {
         beforeEach(() => {
+            user = {};
             user = db.User.build(userInstance);
         });
 
@@ -97,16 +91,7 @@ describe('User Model', () => {
             });
         });
 
-        it('email addresses are unique', (done) => {
-            const duplicateUser = user;
-            user.save()
-                .then(() => {
-                    duplicateUser.save()
-                        .should.eventually.not.equal(undefined)
-                        .notify(done);
-                })
-                .catch(error => done());
-        });
+        
 
         it('password is present (nonblank)', (done) => {
             user.password = user.passwordConfirmation = ' '.repeat(6);
@@ -133,7 +118,7 @@ describe('User Model', () => {
         }).then(result => {
             expect(result.passwordDigest).to.equal(digest);
             done();
-        }).catch(error => done());
+        }).catch(err => done());
     });
 
     describe('User Password Validation', () => {
@@ -144,7 +129,7 @@ describe('User Model', () => {
                         .should.eventually.equal('Invalid password')
                         .notify(done);
                 })
-                .catch(error => done());
+                .catch(err => done());
         })
     })
 });

@@ -123,7 +123,7 @@ export const getTransformedModifiers = (
                 resolve(transformedData);
             }
         })
-        .catch(error => reject(error));
+        .catch(err => reject(err));
 });
 
 /**

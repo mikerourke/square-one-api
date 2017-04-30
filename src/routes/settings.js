@@ -38,7 +38,7 @@ const assignSettingRoutes = (router: Router) => {
                     }
                     return res.status(200).send(settings);
                 })
-                .catch(error => res.status(400).send(error));
+                .catch(err => res.status(400).send(err));
         })
         .post((req: Request, res: Response) => {
             return Setting
@@ -50,7 +50,7 @@ const assignSettingRoutes = (router: Router) => {
                     });
                     res.status(201).send(settingToSend);
                 })
-                .catch(error => res.status(400).send(error));
+                .catch(err => res.status(400).send(err));
         });
 
     router
@@ -67,7 +67,7 @@ const assignSettingRoutes = (router: Router) => {
                     }
                     return res.status(200).send(setting.data);
                 })
-                .catch(error => res.status(400).send(error));
+                .catch(err => res.status(400).send(err));
         })
         .patch((req: Request, res: Response) => {
             return Setting
@@ -81,9 +81,9 @@ const assignSettingRoutes = (router: Router) => {
                     return setting
                         .update(req.body)
                         .then(() => res.status(200).send(setting))
-                        .catch(error => res.status(400).send(error));
+                        .catch(err => res.status(400).send(err));
                 })
-                .catch(error => res.status(400).send(error));
+                .catch(err => res.status(400).send(err));
         });
 };
 

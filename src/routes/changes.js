@@ -26,7 +26,7 @@ const assignChangeRoutes = (router: Router) => {
                     }
                     return res.status(200).send(changes);
                 })
-                .catch(error => res.status(400).send(error));
+                .catch(err => res.status(400).send(err));
         })
         .post((req: Request, res: Response) => {
             const { body = {}, params: { leadId = 0 } } = req;
@@ -36,7 +36,7 @@ const assignChangeRoutes = (router: Router) => {
             return Change
                 .create(newEntity, { fields: getFieldsForCreate(newEntity) })
                 .then(change => res.status(201).send(change))
-                .catch(error => res.status(400).send(error));
+                .catch(err => res.status(400).send(err));
         });
 };
 

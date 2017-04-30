@@ -1,46 +1,43 @@
 /* @flow */
 
-// TODO: Finish authentication.
-// http://blog.slatepeak.com/refactoring-a-basic-authenticated-api-with-node-express-and-mongo/
-
 /* External dependencies */
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 
 /* Internal dependencies */
-import models from '../models';
+import models from '../../models';
 
-const secret = process.env.AUTH_SECRET;
+const secret = process.env.AUTH_SECRET || 'SECRET KEY';
 
 const { User } = (models: Object);
 const localOptions = { usernameField: 'username' };
 
+/**
+ * Setup the local strategy for Passport authentication.
+ */
 const localLogin = new LocalStrategy(localOptions,
     (username, password, done) => {
         User.findOne({ where: { username } })
             .then((user) => {
                 user.authenticate(password)
                     .then(authenticatedUser => done(null, authenticatedUser))
-                    .catch(error => done(error));
+                    .catch(err => done(err));
             })
-            .catch(error => done(null, false, { error }));
+            .catch(err => done(null, false, { err }));
     });
 
 const jwtOptions = {
-    // Telling Passport to check authorization headers for JWT
     jwtFromRequest: ExtractJwt.fromAuthHeader(),
-    // Telling Passport where to find the secret
     secretOrKey: secret,
 };
 
-// Setting up JWT login strategy
 const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
-    User.findById(payload._id)
+    User.findById(payload.id)
         .then((user) => {
             done(null, user);
         })
-        .catch(error => done(error, false));
+        .catch(err => done(err, false));
 });
 
 passport.use(jwtLogin);

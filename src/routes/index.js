@@ -2,8 +2,10 @@
 
 /* External dependencies */
 import { Router } from 'express';
+import passport from 'passport';
 
 /* Internal dependencies */
+import assignAuthRoutes from './auth';
 import assignChangeRoutes from './changes';
 import assignLeadRoutes from './leads';
 import assignMessageRoutes from './messages';
@@ -14,18 +16,26 @@ import assignUserRoutes from './users';
 /* Types */
 import type { Application } from 'express';
 
+const requireAuth = passport.authenticate('jwt', { session: false });
+
 /**
- * Assigns handlers to the application router for each entity type.
+ * Assigns handlers to the application router.
  */
 const assignRoutes = (app: Application) => {
-    const router = Router();
-    assignLeadRoutes(router);
-    assignChangeRoutes(router);
-    assignMessageRoutes(router);
-    assignNoteRoutes(router);
-    assignSettingRoutes(router);
-    assignUserRoutes(router);
-    app.use('/api', router);
+    const authRouter = Router();
+    assignAuthRoutes(authRouter);
+    app.use('/api/auth', authRouter);
+
+    const apiRouter = Router();
+    apiRouter.use(requireAuth);
+    assignLeadRoutes(apiRouter);
+    assignChangeRoutes(apiRouter);
+    assignMessageRoutes(apiRouter);
+    assignNoteRoutes(apiRouter);
+    assignSettingRoutes(apiRouter);
+    assignUserRoutes(apiRouter);
+    
+    app.use('/api', apiRouter);
 };
 
 export default assignRoutes;

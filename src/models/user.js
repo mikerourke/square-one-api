@@ -9,6 +9,9 @@ import {
     getPhoneValidation,
 } from '../lib/validations';
 
+/**
+ * Ensures the password the user enters if secure.
+ */
 const checkForSecurePassword = (user, options): Promise<*> =>
     new Promise((resolve, reject) => {
         if (user.password) {
@@ -46,7 +49,13 @@ const defineUser = (sequelize: Sequelize, DataTypes: DataTypes) =>
             allowNull: false,
             defaultValue: false,
         },
-        accessLevel: DataTypes.STRING,
+        role: DataTypes.ENUM(
+            'admin',
+            'office',
+            'representative',
+            'field',
+            'manager',
+        ),
         passwordDigest: {
             type: DataTypes.STRING,
             validate: {

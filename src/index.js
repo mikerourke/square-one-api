@@ -8,6 +8,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 /* Internal dependencies */
+import './lib/authentication';
 import assignRoutes from './routes';
 
 const app = express();

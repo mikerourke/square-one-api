@@ -46,9 +46,9 @@ const createProductionPackageFile = () =>
 
     const fileToWrite = path.resolve(rootPath, 'production/package.json');
     const contentToWrite = JSON.stringify(productionPackage, null, 2);
-    fs.writeFile(fileToWrite, contentToWrite, (error) => {
-        if (error) {
-            reject(error);
+    fs.writeFile(fileToWrite, contentToWrite, (err) => {
+        if (err) {
+            reject(err);
         }
         console.log('Production package.json file successfully created.');
         resolve();

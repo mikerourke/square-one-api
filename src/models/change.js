@@ -35,7 +35,7 @@ const defineChange = (sequelize: Sequelize, DataTypes: DataTypes) => {
                         change.id = nextId;
                         resolve();
                     })
-                    .catch(error => reject(error));
+                    .catch(err => reject(err));
             }),
             afterCreate: change => getTransformedModifiers(change),
             afterFind: result => getTransformedModifiers(result),

@@ -1,3 +1,4 @@
+/* Internal dependencies */
 import db from '../index';
 
 describe('Models', () => {

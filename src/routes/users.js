@@ -35,7 +35,7 @@ const assignUserRoutes = (router: Router) => {
                     }
                     return res.status(200).send(user);
                 })
-                .catch(error => res.status(400).send(error));
+                .catch(err => res.status(400).send(err));
         })
         .patch((req: Request, res: Response) => {
             return User
@@ -49,48 +49,9 @@ const assignUserRoutes = (router: Router) => {
                     return user
                         .update(req.body)
                         .then(() => res.status(200).send(user))
-                        .catch(error => res.status(400).send(error));
+                        .catch(err => res.status(400).send(err));
                 })
-                .catch(error => res.status(400).send(error));
-        });
-
-    router
-        .route('/users/:username/login')
-        .patch((req: Request, res: Response) => {
-            return User
-                .findOne({
-                    where: whereCondition(req.params),
-                })
-                .then((user) => {
-                    if (!user) {
-                        return res.status(404).send(notFoundMessage);
-                    }
-                    return user
-                        // TODO: Add authentication for login action.
-                        .update({ isLoggedIn: true })
-                        .then(() => res.status(200).send(user))
-                        .catch(error => res.status(400).send(error));
-                })
-                .catch(error => res.status(400).send(error));
-        });
-
-    router
-        .route('/users/:username/logout')
-        .patch((req: Request, res: Response) => {
-            return User
-                .findOne({
-                    where: whereCondition(req.params),
-                })
-                .then((user) => {
-                    if (!user) {
-                        return res.status(404).send(notFoundMessage);
-                    }
-                    return user
-                        .update({ isLoggedIn: false })
-                        .then(() => res.status(200).send(user))
-                        .catch(error => res.status(400).send(error));
-                })
-                .catch(error => res.status(400).send(error));
+                .catch(err => res.status(400).send(err));
         });
 };
 

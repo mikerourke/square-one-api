@@ -8,8 +8,9 @@
       "email": "mike@testing.com",
       "title": "Warlock",
       "isLoggedIn": "false",
-      "password": "mike",
-      "accessLevel": "admin"
+      "password": "thisisthepassword",
+      "passwordConfirmation": "thisisthepassword",
+      "role": "admin"
     },
     {
       "id": 2,
@@ -19,8 +20,9 @@
       "email": "lis@testing.com",
       "title": "Bookkeeper",
       "isLoggedIn": "false",
-      "password": "lis",
-      "accessLevel": "office"
+      "password": "thisisthepassword",
+      "passwordConfirmation": "thisisthepassword",
+      "role": "office"
     },
     {
       "id": 3,
@@ -30,8 +32,9 @@
       "email": "joe@testing.com",
       "title": "President",
       "isLoggedIn": "false",
-      "password": "joe",
-      "accessLevel": "office"
+      "password": "thisisthepassword",
+      "passwordConfirmation": "thisisthepassword",
+      "role": "office"
     },
     {
       "id": 4,
@@ -41,8 +44,9 @@
       "email": "josh@testing.com",
       "title": "President",
       "isLoggedIn": "false",
-      "password": "josh",
-      "accessLevel": "office"
+      "password": "thisisthepassword",
+      "passwordConfirmation": "thisisthepassword",
+      "role": "office"
     }
   ],
   "settings": [
