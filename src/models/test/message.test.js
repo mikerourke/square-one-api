@@ -18,7 +18,7 @@ describe('Message Model', () => {
             db.Message
                 .create(messageToCreate)
                 .then((message) => resolve(message))
-                .catch(err => reject(err));
+                .catch(error => reject(error));
         });
 
     before((done) => {

@@ -54,7 +54,7 @@ const defineLead = (sequelize: Sequelize, DataTypes: DataTypes) => {
                         lead.id = nextId;
                         resolve();
                     })
-                    .catch(err => reject(err));
+                    .catch(error => reject(error));
             }),
             afterCreate: lead => getTransformedModifiers(lead),
             afterFind: result => getTransformedModifiers(result),

@@ -16,7 +16,7 @@ import assignUserRoutes from './users';
 /* Types */
 import type { Application } from 'express';
 
-const requireAuth = passport.authenticate('jwt', { session: false });
+const jwtAuthMiddleware = passport.authenticate('jwt', { session: false });
 
 /**
  * Assigns handlers to the application router.
@@ -27,14 +27,13 @@ const assignRoutes = (app: Application) => {
     app.use('/api/auth', authRouter);
 
     const apiRouter = Router();
-    apiRouter.use(requireAuth);
+    apiRouter.use(jwtAuthMiddleware);
     assignLeadRoutes(apiRouter);
     assignChangeRoutes(apiRouter);
     assignMessageRoutes(apiRouter);
     assignNoteRoutes(apiRouter);
     assignSettingRoutes(apiRouter);
     assignUserRoutes(apiRouter);
-    
     app.use('/api', apiRouter);
 };
 

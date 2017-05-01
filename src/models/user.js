@@ -18,9 +18,9 @@ const checkForSecurePassword = (user, options): Promise<*> =>
             if (user.password !== user.passwordConfirmation) {
                 reject("Password confirmation doesn't match Password");
             }
-            bcrypt.hash(user.get('password'), 10, (err, hash) => {
-                if (err) {
-                    reject(err);
+            bcrypt.hash(user.get('password'), 10, (error, hash) => {
+                if (error) {
+                    reject(error);
                 }
                 user.set('passwordDigest', hash);
                 resolve(options);
@@ -44,11 +44,6 @@ const defineUser = (sequelize: Sequelize, DataTypes: DataTypes) =>
         phone: getPhoneValidation.call(this, DataTypes),
         email: getEmailValidation.call(this, DataTypes),
         title: DataTypes.STRING,
-        isLoggedIn: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false,
-        },
         role: DataTypes.ENUM(
             'admin',
             'office',
@@ -91,11 +86,15 @@ const defineUser = (sequelize: Sequelize, DataTypes: DataTypes) =>
                 const thisUser = this;
                 return new Promise((resolve, reject) => {
                     const digest = thisUser.passwordDigest || '';
-                    if (bcrypt.compare(value, digest)) {
-                        resolve(thisUser);
-                    } else {
-                        reject('Invalid password');
-                    }
+                    bcrypt.compare(value, digest)
+                        .then((result) => {
+                            if (result) {
+                                resolve(thisUser);
+                            } else {
+                                reject('Invalid password');
+                            }
+                        })
+                        .catch(error => reject(error));
                 });
             },
         },

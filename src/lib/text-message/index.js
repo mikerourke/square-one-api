@@ -36,9 +36,9 @@ const sendTextMessage = (textMessage: TextMessage): Promise<*> =>
             from: sendingNumber,
         };
         setTimeout(() => {
-            client.messages.create(messageToSend, (err, data) => {
-                if (err) {
-                    reject(err.message);
+            client.messages.create(messageToSend, (error, data) => {
+                if (error) {
+                    reject(error.message);
                 }
                 resolve();
             });
@@ -51,7 +51,7 @@ const sendTextMessages = (textMessages: Array<TextMessage>): Promise<*> =>
             textMessage => sendTextMessage(textMessage));
         Promise.all(messagesSent)
             .then(() => resolve())
-            .catch(err => reject(err));
+            .catch(error => reject(error));
     });
 
 export default sendTextMessages;

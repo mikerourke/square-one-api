@@ -42,7 +42,7 @@ const assignLeadRoutes = (router: Router) => {
             return Lead
                 .findAll(childrenInclusion)
                 .then(leads => res.status(200).send(leads))
-                .catch(err => res.status(400).send(err));
+                .catch(error => res.status(400).send(error));
         })
         .post((req: Request, res: Response) => {
             return Lead
@@ -50,7 +50,7 @@ const assignLeadRoutes = (router: Router) => {
                     fields: getFieldsForCreate(req.body),
                 })
                 .then(lead => res.status(201).send(lead))
-                .catch(err => res.status(400).send(err));
+                .catch(error => res.status(400).send(error));
         });
 
     router
@@ -64,7 +64,7 @@ const assignLeadRoutes = (router: Router) => {
                     }
                     return res.status(200).send(lead);
                 })
-                .catch(err => res.status(400).send(err));
+                .catch(error => res.status(400).send(error));
         })
         .patch((req: Request, res: Response) => {
             return Lead
@@ -79,9 +79,9 @@ const assignLeadRoutes = (router: Router) => {
                         })
                         .then(() => getTransformedModifiers(lead))
                         .then(updatedLead => res.status(200).send(updatedLead))
-                        .catch(err => res.status(400).send(err));
+                        .catch(error => res.status(400).send(error));
                 })
-                .catch(err => res.status(400).send(err));
+                .catch(error => res.status(400).send(error));
         })
         .delete((req: Request, res: Response) => {
             return Lead
@@ -93,9 +93,9 @@ const assignLeadRoutes = (router: Router) => {
                     return lead
                         .destroy()
                         .then(() => res.status(204).send())
-                        .catch(err => res.status(400).send(err));
+                        .catch(error => res.status(400).send(error));
                 })
-                .catch(err => res.status(400).send(err));
+                .catch(error => res.status(400).send(error));
         });
 };
 

@@ -5,13 +5,13 @@ const shell = require('shelljs');
 
 /* Internal dependencies */
 const developmentPackage = require('../../package.json');
+
 const rootPath = path.resolve(process.cwd());
 
 /**
  * Deletes all the JavaScript files from the "production" directory.
  */
 const clearProductionFolder = () => new Promise((resolve) => {
-    // TODO: Check this for Windows file path.
     shell.cd(`${rootPath}/production`);
     const jsFiles = shell.find('.').filter(file => file.match(/\.js$/));
     shell.rm(jsFiles);
@@ -21,11 +21,8 @@ const clearProductionFolder = () => new Promise((resolve) => {
 /**
  * Creates a package.json file for the production release.
  */
-const createProductionPackageFile = () =>
-    new Promise((resolve, reject) => {
-    const productionPackage = {
-        main: 'bin/www.js',
-    };
+const createProductionPackageFile = () => new Promise((resolve, reject) => {
+    const productionPackage = {};
 
     Object.keys(developmentPackage).forEach((lineItem) => {
         switch (lineItem) {
@@ -44,15 +41,32 @@ const createProductionPackageFile = () =>
         }
     });
 
+    productionPackage.scripts = {
+        start: 'node --require dotenv/config ./bin/www.js',
+    };
+
     const fileToWrite = path.resolve(rootPath, 'production/package.json');
     const contentToWrite = JSON.stringify(productionPackage, null, 2);
-    fs.writeFile(fileToWrite, contentToWrite, (err) => {
-        if (err) {
-            reject(err);
+    fs.writeFile(fileToWrite, contentToWrite, (error) => {
+        if (error) {
+            reject(error);
         }
         console.log('Production package.json file successfully created.');
         resolve();
     });
 });
 
-updateClientFolder();
+const transpileFiles = () => new Promise((resolve, reject) => {
+    shell.exec(`babel -d ${rootPath}/production ${rootPath}/src`,
+        (code, stdout, stderr) => {
+            if (stderr) {
+                reject('Error occurred: ' + stderr);
+            }
+            resolve();
+        })
+});
+
+clearProductionFolder()
+    .then(transpileFiles)
+    .then(createProductionPackageFile)
+    .then(() => console.log('All tasks complete.'));

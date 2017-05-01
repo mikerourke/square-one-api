@@ -23,6 +23,14 @@ const whereCondition = entity => ({ username: entity.username });
  */
 const assignUserRoutes = (router: Router) => {
     router
+        .get('/users', (req: Request, res: Response) => {
+            return User
+                .findAll()
+                .then(users => res.status(200).send(users))
+                .catch(error => res.status(400).send(error));
+        });
+
+    router
         .route('/users/:username')
         .get((req: Request, res: Response) => {
             return User
@@ -35,7 +43,7 @@ const assignUserRoutes = (router: Router) => {
                     }
                     return res.status(200).send(user);
                 })
-                .catch(err => res.status(400).send(err));
+                .catch(error => res.status(400).send(error));
         })
         .patch((req: Request, res: Response) => {
             return User
@@ -49,9 +57,9 @@ const assignUserRoutes = (router: Router) => {
                     return user
                         .update(req.body)
                         .then(() => res.status(200).send(user))
-                        .catch(err => res.status(400).send(err));
+                        .catch(error => res.status(400).send(error));
                 })
-                .catch(err => res.status(400).send(err));
+                .catch(error => res.status(400).send(error));
         });
 };
 

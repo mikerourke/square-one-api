@@ -8,23 +8,22 @@ import LocalStrategy from 'passport-local';
 /* Internal dependencies */
 import models from '../../models';
 
-const secret = process.env.AUTH_SECRET || 'SECRET KEY';
+const secret = process.env.JWT_SECRET || 'SECRET KEY';
 
 const { User } = (models: Object);
-const localOptions = { usernameField: 'username' };
 
 /**
  * Setup the local strategy for Passport authentication.
  */
-const localLogin = new LocalStrategy(localOptions,
+const localLogin = new LocalStrategy({ usernameField: 'username' },
     (username, password, done) => {
         User.findOne({ where: { username } })
             .then((user) => {
                 user.authenticate(password)
                     .then(authenticatedUser => done(null, authenticatedUser))
-                    .catch(err => done(err));
+                    .catch(error => done(error));
             })
-            .catch(err => done(null, false, { err }));
+            .catch(error => done(null, false, { error }));
     });
 
 const jwtOptions = {
@@ -33,11 +32,11 @@ const jwtOptions = {
 };
 
 const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
-    User.findById(payload.id)
+    User.findOne({ where: { username: payload.username } })
         .then((user) => {
             done(null, user);
         })
-        .catch(err => done(err, false));
+        .catch(error => done(error, false));
 });
 
 passport.use(jwtLogin);

@@ -33,7 +33,7 @@ const defineNote = (sequelize: Sequelize, DataTypes: DataTypes) => {
                         note.id = nextId;
                         resolve();
                     })
-                    .catch(err => reject(err));
+                    .catch(error => reject(error));
             }),
             afterCreate: note => getTransformedModifiers(note),
             afterFind: result => getTransformedModifiers(result),

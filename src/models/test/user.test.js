@@ -9,7 +9,6 @@ describe('User Model', () => {
         phone: '1234567890',
         email: 'jt@website.com',
         title: 'Test Person',
-        isLoggedIn: false,
         role: 'admin',
         password: '1234567',
         passwordConfirmation: '1234567',
@@ -118,7 +117,7 @@ describe('User Model', () => {
         }).then(result => {
             expect(result.passwordDigest).to.equal(digest);
             done();
-        }).catch(err => done());
+        }).catch(error => done());
     });
 
     describe('User Password Validation', () => {
@@ -129,7 +128,7 @@ describe('User Model', () => {
                         .should.eventually.equal('Invalid password')
                         .notify(done);
                 })
-                .catch(err => done());
+                .catch(error => done());
         })
     })
 });

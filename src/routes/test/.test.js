@@ -17,8 +17,8 @@ export const getTokenForTesting = (app) => new Promise((resolve, reject) => {
         .set('X-Real-IP', URI)
         .type('form')
         .send(validUser)
-        .end((err, res) => {
-            if (err) reject(err);
+        .end((error, res) => {
+            if (error) reject(error);
             resolve(res.body.token);
         });
 });

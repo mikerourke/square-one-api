@@ -23,7 +23,7 @@ describe('Authentication Routes', () => {
             .post('/api/auth/login')
             .set('X-Real-IP', URI)
             .type('form')
-            .send({ wrongparam: 'err' })
+            .send({ wrongparam: 'error' })
             .expect(400, done);
   });
 
@@ -32,7 +32,7 @@ describe('Authentication Routes', () => {
             .post('/api/auth/login')
             .set('X-Real-IP', URI)
             .type('form')
-            .send({ username: 'err', password: '22' })
+            .send({ username: 'error', password: '22' })
             .expect(401, done);
     });
 
@@ -43,8 +43,8 @@ describe('Authentication Routes', () => {
             .type('form')
             .send(validUser)
             .expect(200)
-            .end((err, res) => {
-                if (err) done(err);
+            .end((error, res) => {
+                if (error) done(error);
                 
                 const { token, user } = res.body;
                 assert.isString(token, 'Token is a string');

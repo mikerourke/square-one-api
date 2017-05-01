@@ -15,8 +15,8 @@ describe('Entity Modifications', () => {
                 .then((change) => {
                     changeFromDb = change;
                     done();
-                }).catch(err => done(err));
-        }).catch(err => done(err));
+                }).catch(error => done(error));
+        }).catch(error => done(error));
     });
 
     const expectedFields = [
@@ -61,7 +61,7 @@ describe('Entity Modifications', () => {
                 expect(createdBy).to.eql(expectedResult);
                 expect(updatedBy).to.eql(expectedResult);
                 done();
-            }).catch(err => done(err));
+            }).catch(error => done(error));
     });
 
     it('gracefully handles transforming invalid modifiers', (done) => {
@@ -75,6 +75,6 @@ describe('Entity Modifications', () => {
                 expect(createdBy).to.equal(2);
                 expect(updatedBy).to.equal(2);
                 done();
-            }).catch(err => done(err));
+            }).catch(error => done(error));
     });
 });

@@ -30,7 +30,7 @@ const assignNoteRoutes = (router: Router) => {
                     }
                     return res.status(200).send(notes);
                 })
-                .catch(err => res.status(400).send(err));
+                .catch(error => res.status(400).send(error));
         })
         .post((req: Request, res: Response) => {
             const { body = {}, params: { leadId = 0 } } = (req: Object);
@@ -40,7 +40,7 @@ const assignNoteRoutes = (router: Router) => {
             return Note
                 .create(newEntity, { fields: getFieldsForCreate(newEntity) })
                 .then(note => res.status(201).send(note))
-                .catch(err => res.status(400).send(err));
+                .catch(error => res.status(400).send(error));
         });
 
     router
@@ -54,7 +54,7 @@ const assignNoteRoutes = (router: Router) => {
                     }
                     return res.status(200).send(note);
                 })
-                .catch(err => res.status(400).send(err));
+                .catch(error => res.status(400).send(error));
         })
         .patch((req: Request, res: Response) => {
             return Note
@@ -69,9 +69,9 @@ const assignNoteRoutes = (router: Router) => {
                         })
                         .then(() => getTransformedModifiers(note))
                         .then(updatedNote => res.status(200).send(updatedNote))
-                        .catch(err => res.status(400).send(err));
+                        .catch(error => res.status(400).send(error));
                 })
-                .catch(err => res.status(400).send(err));
+                .catch(error => res.status(400).send(error));
         })
         .delete((req: Request, res: Response) => {
             return Note
@@ -83,9 +83,9 @@ const assignNoteRoutes = (router: Router) => {
                     return note
                         .destroy()
                         .then(() => res.status(204).send())
-                        .catch(err => res.status(400).send(err));
+                        .catch(error => res.status(400).send(error));
                 })
-                .catch(err => res.status(400).send(err));
+                .catch(error => res.status(400).send(error));
         });
 };
 

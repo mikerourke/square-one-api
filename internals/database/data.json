@@ -7,7 +7,6 @@
       "phone": "1234567890",
       "email": "mike@testing.com",
       "title": "Warlock",
-      "isLoggedIn": "false",
       "password": "thisisthepassword",
       "passwordConfirmation": "thisisthepassword",
       "role": "admin"
@@ -19,7 +18,6 @@
       "phone": "1234567890",
       "email": "lis@testing.com",
       "title": "Bookkeeper",
-      "isLoggedIn": "false",
       "password": "thisisthepassword",
       "passwordConfirmation": "thisisthepassword",
       "role": "office"
@@ -31,7 +29,6 @@
       "phone": "1234567890",
       "email": "joe@testing.com",
       "title": "President",
-      "isLoggedIn": "false",
       "password": "thisisthepassword",
       "passwordConfirmation": "thisisthepassword",
       "role": "office"
@@ -43,7 +40,6 @@
       "phone": "1234567890",
       "email": "josh@testing.com",
       "title": "President",
-      "isLoggedIn": "false",
       "password": "thisisthepassword",
       "passwordConfirmation": "thisisthepassword",
       "role": "office"

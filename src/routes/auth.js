@@ -3,7 +3,6 @@
 /* External dependencies */
 import { sign } from 'jsonwebtoken';
 import passport from 'passport';
-import crypto from 'crypto';
 
 /* Internal dependencies */
 import models from '../models';
@@ -13,13 +12,16 @@ import type { Router, Request, Response } from 'express';
 
 type AuthUser = {
     id: number,
+    username: string,
     fullName: string,
+    phone: string,
     email: string,
+    title: string,
     role: string,
 };
 
 const { User } = (models: Object);
-const secret = process.env.AUTH_SECRET;
+const secret = process.env.JWT_SECRET;
 
 /**
  * Returns a JSON Web Token for the specified user.
@@ -30,45 +32,18 @@ const generateToken = (user: AuthUser) => sign(user, secret, {
 });
 
 /**
- * Returns an object with user details extrapolated from the request body.
- * @param {Request} req HTTP request associated with API call.
+ * Returns an object with user details for sending in the login route.
+ * @param {Object} userObject Sequelize User instance to pull data from.
  */
-const getUserFromRequest = (req: Request): AuthUser => {
-    const user = {
-        id: 0,
-        fullName: '',
-        email: '',
-        role: '',
-    };
-    if (req.body) {
-        return Object.assign({}, user, req.body);
-    }
-    return user;
-};
-
-/**
- * Ensures the user is an administrator prior to allowing access to the
- *      administration dashboard.
- * @param {string} role Role of the user.
- */
-const authorizeRole = (role: string) =>
-    (req: Request, res: Response, next) => {
-        const { id } = getUserFromRequest(req);
-        User.findById(id)
-            .then((user) => {
-                if (user.role === role) {
-                    return next();
-                }
-                res.status(401).json({ 
-                    err: 'You are not authorized to view this content.',
-                });
-                return next('Unauthorized');
-            })
-            .catch((err) => {
-                res.status(422).json({ err: 'User not found.' });
-                return next(err);
-            });
-    };
+const getUserForResponse = (userObject: Object): AuthUser => ({
+    id: userObject.id,
+    username: userObject.username,
+    fullName: userObject.fullName,
+    phone: userObject.phone,
+    email: userObject.email,
+    title: userObject.title,
+    role: userObject.role,
+});
 
 const requireLogin = passport.authenticate('local', { session: false });
 
@@ -79,13 +54,17 @@ const requireLogin = passport.authenticate('local', { session: false });
 const assignAuthRoutes = (router: Router) => {
     router
         .post('/login', requireLogin, (req: Request, res: Response) => {
-            const user = getUserFromRequest(req);
-            const jwtToken = generateToken(user);
-            const jwtResponse = {
-                user,
-                token: `JWT ${jwtToken}`,
-            };
-            res.status(200).status(200).json(jwtResponse);
+            User.findOne({ where: { username: req.body.username } })
+                .then((user) => {
+                    const userForResponse = getUserForResponse(user.toJSON());
+                    const jwtToken = generateToken(userForResponse);
+                    const jwtResponse = {
+                        user: userForResponse,
+                        token: `JWT ${jwtToken}`,
+                    };
+                    res.status(200).send(jwtResponse);
+                })
+                .catch(error => res.status(404).send(error));
         });
 };
 

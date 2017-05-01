@@ -4,7 +4,7 @@ import request from 'supertest';
 /* Internal dependencies */
 import app from '../../index';
 import db from '../../models';
-import { getTokenForTesting, validUser, URI } from './.test.js';
+import { getTokenForTesting, URI } from './.test.js';
 
 const { Lead } = db;
 
@@ -45,8 +45,8 @@ describe.only('Lead Routes', () => {
                         defaults: validLead
                     })
                     .spread((newLead, created) => done())
-                    .catch(err => done());
-            }).catch(err => done(err));
+                    .catch(error => done());
+            }).catch(error => done(error));
         });
     });
 
@@ -71,8 +71,8 @@ describe.only('Lead Routes', () => {
             .set('X-Real-IP', URI)
             .set('Authorization', token)
             .expect(200)
-            .end((err, res) => {
-                if (err) done(err);
+            .end((error, res) => {
+                if (error) done(error);
 
                 const actualResult = res.body;
                 const expectedResult = Object.keys(validLead).concat([
@@ -102,8 +102,8 @@ describe.only('Lead Routes', () => {
             .set('X-Real-IP', URI)
             .set('Authorization', token)
             .send(newLead)
-            .end((err, res) => {
-                if (err) done(err);
+            .end((error, res) => {
+                if (error) done(error);
 
                 const expectedResult = 'Sally Tester';
                 const actualResult = res.body.leadName;
