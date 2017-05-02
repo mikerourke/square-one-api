@@ -30,11 +30,12 @@ const assignMessageRoutes = (router: Router) => {
         })
         .post((req: Request, res: Response) => {
             const { body = {}, params: { leadId = 0 } } = req;
-            const newEntity = Object.assign({}, body, {
+            const newEntities = body.map(message => Object.assign({}, message, {
                 parentId: leadId,
-            });
+            }));
+            const fields = getFieldsForCreate(newEntities[0]);
             return Message
-                .create(newEntity, { fields: getFieldsForCreate(newEntity) })
+                .bulkCreate(newEntities, { fields })
                 .then(message => res.status(201).send(message))
                 .catch(error => res.status(400).send(error));
         });
