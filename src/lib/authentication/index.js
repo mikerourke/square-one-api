@@ -33,10 +33,8 @@ const jwtOptions = {
 
 const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
     User.findOne({ where: { username: payload.username } })
-        .then((user) => {
-            done(null, user);
-        })
-        .catch(error => done(error, false));
+        .then(user => done(null, user))
+        .catch(error => done(null, false, { error }));
 });
 
 passport.use(jwtLogin);

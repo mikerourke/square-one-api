@@ -5,15 +5,34 @@ import { getTransformedModifiers } from '../lib/entity-modifications';
 import getNextIdNumber from '../lib/id-generator';
 import sendTextMessages from '../lib/text-message';
 
-const assignIdToMessage = (messageModel: Object, messageInstance: Object) =>
+const assignIdsHook = (
+    messageModel: Object,
+    messages: Array<Object>,
+): Promise<*> =>
     new Promise((resolve, reject) => {
         getNextIdNumber(messageModel)
             .then((nextId) => {
-                messageInstance.id = nextId;
-                resolve(messageInstance);
+                let messageId = nextId;
+                messages.forEach((message) => {
+                    message.id = messageId;
+                    messageId += 1;
+                });
+                resolve();
             })
             .catch(error => reject(error));
     });
+
+const sendMessagesHook = (messages: Array<Object>): Promise<*> =>
+    new Promise((resolve, reject) => {
+        const messagesToSend = messages.map(message => ({
+            body: message.body,
+            to: message.recipient,
+        }));
+        sendTextMessages(messagesToSend)
+            .then(() => resolve())
+            .catch(error => reject(error));
+    });
+
 
 const defineMessage = (sequelize: Sequelize, DataTypes: DataTypes) => {
     const messageModel = sequelize.define('Message', {
@@ -40,49 +59,23 @@ const defineMessage = (sequelize: Sequelize, DataTypes: DataTypes) => {
             },
         },
         hooks: {
-            beforeCreate: message => new Promise((resolve, reject) => {
-                getNextIdNumber(messageModel)
-                    .then((nextId) => {
-                        message.id = nextId;
-                        resolve();
-                    })
-                    .catch(error => reject(error));
-            }),
             beforeBulkCreate: messages => new Promise((resolve, reject) => {
-                getNextIdNumber(messageModel)
-                    .then((nextId) => {
-                        let messageId = nextId;
-                        messages.forEach((message) => {
-                            message.id = messageId;
-                            messageId += 1;
-                        });
-                        resolve();
+                sendMessagesHook(messages)
+                    .then(() => {
+                        getNextIdNumber(messageModel)
+                            .then((nextId) => {
+                                let messageId = nextId;
+                                messages.forEach((message) => {
+                                    message.id = messageId;
+                                    messageId += 1;
+                                });
+                                resolve();
+                            })
+                            .catch(error => reject(error));
                     })
                     .catch(error => reject(error));
             }),
-            afterCreate: message => new Promise((resolve, reject) => {
-                const { recipient, body } = message;
-                const messageToSend = {
-                    body,
-                    to: recipient,
-                };
-                sendTextMessages([messageToSend])
-                    .then(() => getTransformedModifiers(message)
-                        .then(results => resolve(results))
-                        .catch(() => resolve(message)))
-                    .catch(error => reject(error));
-            }),
-            afterBulkCreate: messages => new Promise((resolve, reject) => {
-                const messagesToSend = messages.map(message => ({
-                    body: message.body,
-                    to: message.recipient,
-                }));
-                sendTextMessages(messagesToSend)
-                    .then(() => getTransformedModifiers(messages)
-                        .then(results => resolve(results))
-                        .catch(() => resolve(messages)))
-                    .catch(error => reject(error));
-            }),
+            afterBulkCreate: messages => getTransformedModifiers(messages),
             afterFind: result => getTransformedModifiers(result),
         },
         scopes: {

@@ -54,7 +54,7 @@ const assignSettingRoutes = (router: Router) => {
         });
 
     router
-        .route('/settings/:category/:groupName')
+        .route('/settings/:category')
         .get((req: Request, res: Response) => {
             return Setting
                 .findOne({

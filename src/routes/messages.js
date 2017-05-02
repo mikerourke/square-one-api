@@ -36,7 +36,26 @@ const assignMessageRoutes = (router: Router) => {
             const fields = getFieldsForCreate(newEntities[0]);
             return Message
                 .bulkCreate(newEntities, { fields })
-                .then(message => res.status(201).send(message))
+                .then(messages => res.status(201).send(messages))
+                .catch(error => res.status(400).send(error));
+        });
+
+    router
+        .route('/leads/:leadId/messages/:messageId')
+        .get((req: Request, res: Response) => {
+            return Message
+                .findOne({
+                    where: {
+                        parentId: req.params.leadId,
+                        id: req.params.messageId,
+                    },
+                })
+                .then((message) => {
+                    if (!message) {
+                        return res.status(404).send(notFoundMessage);
+                    }
+                    return res.status(200).send(message);
+                })
                 .catch(error => res.status(400).send(error));
         });
 };

@@ -44,7 +44,14 @@ module.exports = {
         mocha: true
     },
     rules: {
-        'max-len': ['error', 80, 4, { 'ignoreUrls': true }],
+        'max-len': ['error', 80, 4, {
+            ignoreComments: true,
+            ignoreRegExpLiterals: true,
+            ignoreStrings: true,
+            ignoreTemplateLiterals: true,
+            ignoreTrailingComments: true,
+            ignoreUrls: true,
+        }],
         // Since I develop on both Windows and Mac, I don't want to have to keep
         // fixing this:
         'linebreak-style': 'off',

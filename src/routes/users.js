@@ -17,6 +17,22 @@ const notFoundMessage = { message: 'User not found' };
  */
 const whereCondition = entity => ({ username: entity.username });
 
+const getPertinentData = (users: Array<Object>): Promise<*> =>
+    new Promise((resolve, reject) => {
+        if (users.length !== 0) {
+            const usersToSend = users.map(user => ({
+                id: user.id,
+                username: user.username,
+                fullName: user.fullName,
+                title: user.title,
+                role: user.role,
+            }));
+            resolve(usersToSend);
+        } else {
+            reject('No users found');
+        }
+    });
+
 /**
  * Assigns routes to the Express Router instance associated with User models.
  * @param {Object} router Express router that routes are assigned to.
@@ -26,6 +42,7 @@ const assignUserRoutes = (router: Router) => {
         .get('/users', (req: Request, res: Response) => {
             return User
                 .findAll()
+                .then(getPertinentData)
                 .then(users => res.status(200).send(users))
                 .catch(error => res.status(400).send(error));
         });
