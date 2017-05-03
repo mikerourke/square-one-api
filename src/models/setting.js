@@ -19,11 +19,8 @@ const defineSetting = (sequelize: Sequelize, DataTypes: DataTypes) =>
                 sequelize.model('User')
                     .findAll({ where: { title: 'Representative' } })
                     .then((users) => {
-                        const representatives = users.map(user => ({
-                            fullName: user.fullName,
-                            phone: user.phone,
-                            email: user.email,
-                        }));
+                        const representatives = users.map(
+                            user => user.fullName);
                         results.push({
                             id: 999, // Arbitrary value to prevent ID collision.
                             category: 'lists',
