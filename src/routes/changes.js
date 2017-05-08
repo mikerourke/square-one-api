@@ -14,7 +14,7 @@ const notFoundMessage = { message: 'Change not found' };
  * Assigns routes to the Express Router instance associated with Change models.
  * @param {Object} router Express router that routes are assigned to.
  */
-const assignChangeRoutes = (router: Router) => {
+export default function assignChangeRoutes(router: Router) {
     router
         .route('/leads/:leadId/changes')
         .get((req: Request, res: Response) => {
@@ -38,6 +38,4 @@ const assignChangeRoutes = (router: Router) => {
                 .then(change => res.status(201).send(change))
                 .catch(error => res.status(400).send(error));
         });
-};
-
-export default assignChangeRoutes;
+}

@@ -1,34 +1,29 @@
 /* Internal dependencies */
 import db from '../index';
+import { validMessage, validLead } from './helpers';
 
 describe('Message Model', () => {
-    const messageInstance = {
-        messageType: 'text',
-        recipient: process.env.MY_PHONE_NUMBER,
-        subject: 'Subject for Test',
-        body: 'This is a message for testing.',
-        createdBy: 1,
-        createdAt: '2017-04-20 20:00:00',
-        updatedBy: 1,
-        updatedAt: '2017-04-20 20:00:00'
-    };
-
-    const createNewMessage = (messageToCreate) =>
-        new Promise((resolve, reject) => {
-            db.Message
-                .create(messageToCreate)
-                .then((message) => resolve(message))
-                .catch(error => reject(error));
-        });
+    let leadFromDb;
 
     before((done) => {
-        db.sequelize.sync().then(() => done());
+        db.sequelize.sync()
+            .then(() => {
+                db.Lead.create(validLead)
+                    .then((lead) => {
+                        leadFromDb = lead;
+                        done();
+                    })
+                    .catch(error => done(error));
+            })
+            .catch(error => done(error));
     });
 
-    it('creates a new message', (done) => {
-        createNewMessage(messageInstance)
-            .then((message) => {
-                expect(message.messageType).to.equal('text');
+    it('creates new messages', (done) => {
+        const messageToCreate = { ...validMessage, parentId: leadFromDb.id };
+        const messagesToCreate = [messageToCreate];
+        db.Message.bulkCreate(messagesToCreate)
+            .then((messages) => {
+                expect(messages[0].messageType).to.equal('text');
                 done();
             })
             .catch(done);

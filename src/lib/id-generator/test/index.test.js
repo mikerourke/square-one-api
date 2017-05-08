@@ -1,33 +1,44 @@
-/* External dependencies */
-import moment from 'moment';
-import SequelizeMock from 'sequelize-mock';
-
 /* Internal dependencies */
+import db from '../../../models';
+import { validLead, getIdForToday } from '../../../models/test/helpers';
 import getNextIdNumber from '../index';
 
-let LeadMock;
-
-const getIdForTesting = () => {
-    const dateElements = moment().format('YYMMDD');
-    const idAsString = `101${dateElements}0001`;
-    return +idAsString;
-};
+const deleteAllLeads = () => new Promise((resolve, reject) => {
+    db.Lead.destroy({ where: {} })
+        .then(() => resolve())
+        .catch(error => reject(new Error(error)));
+});
 
 describe('ID Generator', () => {
     before((done) => {
-        const idForTesting = getIdForTesting();
-        const dbMock = new SequelizeMock();
-        LeadMock = dbMock.define('Lead', {
-            id: idForTesting,
-            name: ''
-        });
-        done();
+        db.sequelize.sync()
+            .then(() => {
+                deleteAllLeads().then(() => done()).catch(error => done(error));
+            })
+            .catch(error => done(error));
     });
 
-    it('should generate the next ID number', (done) => {
-        const expectedId = getIdForTesting() + 1;
-        getNextIdNumber(LeadMock)
-            .should.eventually.equal(expectedId)
-            .notify(done);
+    after((done) => {
+        deleteAllLeads().then(() => done()).catch(error => done(error));
+    });
+
+    it('generates the next ID for a model', (done) => {
+        const expectedId = getIdForToday();
+        getNextIdNumber(db.Lead)
+            .then((nextId) => {
+                expect(nextId).to.equal(expectedId);
+                done();
+            })
+            .catch(error => done(error));
+    });
+
+    it('generates the next ID number before Lead creation', (done) => {
+        const expectedId = getIdForToday();
+        db.Lead.create(validLead)
+            .then((lead) => {
+                expect(+lead.id).to.equal(expectedId);
+                done();
+            })
+            .catch(error => done(error));
     })
 });

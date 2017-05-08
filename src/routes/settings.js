@@ -26,7 +26,7 @@ const whereCondition = (entity) => {
  * Assigns routes to the Express Router instance associated with Setting models.
  * @param {Object} router Express router that routes are assigned to.
  */
-const assignSettingRoutes = (router: Router) => {
+export default function assignSettingRoutes(router: Router) {
     router
         .route('/settings/')
         .get((req: Request, res: Response) => {
@@ -85,6 +85,4 @@ const assignSettingRoutes = (router: Router) => {
                 })
                 .catch(error => res.status(400).send(error));
         });
-};
-
-export default assignSettingRoutes;
+}

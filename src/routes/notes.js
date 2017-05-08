@@ -18,7 +18,7 @@ const notFoundMessage = { message: 'Note not found' };
  * Assigns routes to the Express Router instance associated with Note models.
  * @param {Object} router Express router that routes are assigned to.
  */
-const assignNoteRoutes = (router: Router) => {
+export default function assignNoteRoutes(router: Router) {
     router
         .route('/leads/:leadId/notes')
         .get((req: Request, res: Response) => {
@@ -87,6 +87,4 @@ const assignNoteRoutes = (router: Router) => {
                 })
                 .catch(error => res.status(400).send(error));
         });
-};
-
-export default assignNoteRoutes;
+}

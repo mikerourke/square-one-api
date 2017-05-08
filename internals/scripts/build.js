@@ -49,7 +49,7 @@ const createProductionPackageFile = () => new Promise((resolve, reject) => {
     const contentToWrite = JSON.stringify(productionPackage, null, 2);
     fs.writeFile(fileToWrite, contentToWrite, (error) => {
         if (error) {
-            reject(error);
+            reject(new Error(error));
         }
         console.log('Production package.json file successfully created.');
         resolve();
@@ -60,7 +60,7 @@ const transpileFiles = () => new Promise((resolve, reject) => {
     shell.exec(`babel -d ${rootPath}/production ${rootPath}/src`,
         (code, stdout, stderr) => {
             if (stderr) {
-                reject('Error occurred: ' + stderr);
+                reject(new Error(stderr));
             }
             resolve();
         })

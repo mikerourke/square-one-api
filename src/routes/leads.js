@@ -35,7 +35,7 @@ const childrenInclusion = {
  * Assigns routes to the Express Router instance associated with Lead models.
  * @param {Object} router Express router that routes are assigned to.
  */
-const assignLeadRoutes = (router: Router) => {
+export default function assignLeadRoutes(router: Router) {
     router
         .route('/leads')
         .get((req: Request, res: Response) => {
@@ -45,9 +45,10 @@ const assignLeadRoutes = (router: Router) => {
                 .catch(error => res.status(400).send(error));
         })
         .post((req: Request, res: Response) => {
+            const newLead = { ...req.body, email: null, phone: null };
             return Lead
-                .create(req.body, {
-                    fields: getFieldsForCreate(req.body),
+                .create(newLead, {
+                    fields: getFieldsForCreate(newLead),
                 })
                 .then(lead => res.status(201).send(lead))
                 .catch(error => res.status(400).send(error));
@@ -97,6 +98,4 @@ const assignLeadRoutes = (router: Router) => {
                 })
                 .catch(error => res.status(400).send(error));
         });
-};
-
-export default assignLeadRoutes;
+}

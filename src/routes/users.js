@@ -29,7 +29,7 @@ const getPertinentData = (users: Array<Object>): Promise<*> =>
             }));
             resolve(usersToSend);
         } else {
-            reject('No users found');
+            reject(new Error('No users found'));
         }
     });
 
@@ -37,7 +37,7 @@ const getPertinentData = (users: Array<Object>): Promise<*> =>
  * Assigns routes to the Express Router instance associated with User models.
  * @param {Object} router Express router that routes are assigned to.
  */
-const assignUserRoutes = (router: Router) => {
+export default function assignUserRoutes(router: Router) {
     router
         .get('/users', (req: Request, res: Response) => {
             return User
@@ -78,6 +78,4 @@ const assignUserRoutes = (router: Router) => {
                 })
                 .catch(error => res.status(400).send(error));
         });
-};
-
-export default assignUserRoutes;
+}

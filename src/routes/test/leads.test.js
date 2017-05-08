@@ -4,34 +4,17 @@ import request from 'supertest';
 /* Internal dependencies */
 import app from '../../index';
 import db from '../../models';
-import { getTokenForTesting, URI } from './.test.js';
+import { validLead, getIdForToday } from '../../models/test/helpers';
+import { getTokenForTesting, URI } from './helpers';
 
 const { Lead } = db;
 
-describe.only('Lead Routes', () => {
+describe('Lead Routes', () => {
     let token;
 
-    const leadId = 1011701010001;
-    const validLead = {
-        id: leadId,
-        leadName: 'John Test',
-        contactName: '',
-        source: 'Facebook',
-        leadFee: 0,
-        phone: '1234567890',
-        email: 'john@test.com',
-        address: '123 Fake Street',
-        lat: 0,
-        lng: 0,
-        description: 'This is a test lead',
-        status: 'Active',
-        assignTo: '',
-        createdBy: 1,
-        updatedBy: 1
-    };
+    const leadId = getIdForToday();
 
     const newLead = Object.assign({}, validLead, {
-        id: leadId + 1,
         leadName: 'Sally Tester',
     });
 
@@ -41,7 +24,7 @@ describe.only('Lead Routes', () => {
                 token = jwtToken;
 
                 Lead.findOrCreate({
-                        where: { id: validLead.id },
+                        where: { id: leadId },
                         defaults: validLead
                     })
                     .spread((newLead, created) => done())
@@ -90,7 +73,7 @@ describe.only('Lead Routes', () => {
 
     it('deletes a lead', (done) => {
         request(app)
-            .delete(`/api/leads/${newLead.id}`)
+            .delete(`/api/leads/${leadId}`)
             .set('X-Real-IP', URI)
             .set('Authorization', token)
             .expect(204, done);

@@ -65,6 +65,14 @@ const assignAuthRoutes = (router: Router) => {
                     res.status(200).send(jwtResponse);
                 })
                 .catch(error => res.status(404).send(error));
+        })
+        .post('/logout', (req: Request, res: Response) => {
+            User.findOne({ where: { username: req.body.username } })
+                .then((user) => {
+                    const userForResponse = getUserForResponse(user.toJSON());
+                    res.status(200).send(userForResponse);
+                })
+                .catch(error => res.status(404).send(error));
         });
 };
 

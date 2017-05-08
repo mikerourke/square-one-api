@@ -1,19 +1,19 @@
 /* Internal dependencies */
 import sendTextMessages from '../index';
 
-describe('Text Messaging', () => {
+describe.skip('Text Messaging', () => {
     const singleMessage = {
         to: process.env.MY_PHONE_NUMBER,
         body: 'This is a test message.'
     };
 
-    it.skip('sends single text message to valid recipient', (done) => {
+    it('sends single text message to valid recipient', (done) => {
         sendTextMessages([singleMessage])
             .should.be.fulfilled
             .notify(done);
     });
 
-    it.skip('sends multiple text messages to valid recipients', (done) => {
+    it('sends multiple text messages to valid recipients', (done) => {
         const secondMessage = Object.assign({}, singleMessage, {
             body: 'This is a second message.'
         });

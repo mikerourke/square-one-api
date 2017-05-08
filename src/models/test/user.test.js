@@ -1,27 +1,18 @@
 /* Internal dependencies */
 import db from '../index';
+import { validUser } from './helpers';
 
 describe('User Model', () => {
     let user;
-    const userInstance = {
-        username: 'tester',
-        fullName: 'John Testinghouse',
-        phone: '1234567890',
-        email: 'jt@website.com',
-        title: 'Test Person',
-        role: 'admin',
-        password: '1234567',
-        passwordConfirmation: '1234567',
-    };
 
     before((done) => {
-        db.sequelize.sync().then(() => done());
+        db.sequelize.sync().then(() => done()).catch(error => done(error));
     });
 
     describe('User Field Validation', () => {
         beforeEach(() => {
             user = {};
-            user = db.User.build(userInstance);
+            user = db.User.build(validUser);
         });
 
         it('is valid', (done) => {
@@ -90,8 +81,6 @@ describe('User Model', () => {
             });
         });
 
-        
-
         it('password is present (nonblank)', (done) => {
             user.password = user.passwordConfirmation = ' '.repeat(6);
             user.validate()
@@ -112,7 +101,7 @@ describe('User Model', () => {
                        '9en550HCthZALRS1BWqWKa';
         db.User.findOne({
             where: {
-                email: 'jt@website.com',
+                email: 'mike@stuff.com',
             }
         }).then(result => {
             expect(result.passwordDigest).to.equal(digest);
@@ -122,7 +111,7 @@ describe('User Model', () => {
 
     describe('User Password Validation', () => {
         it('authenticates the user', (done) => {
-            db.User.create(userInstance)
+            db.User.create(validUser)
                 .then(user => {
                     user.authenticate('7654321')
                         .should.eventually.equal('Invalid password')

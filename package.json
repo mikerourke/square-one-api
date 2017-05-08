@@ -12,8 +12,6 @@
     "start": "nodemon ./src/bin/www.js --exec \"node --require dotenv/config --require babel-register\"",
     "start:test": "cross-env NODE_ENV=test npm start",
     "test": "find ./src -name '*.test.js' | xargs cross-env NODE_ENV=test mocha --opts ./mocha.opts || exit 0",
-    "torus:start": "torus run npm run start",
-    "torus:test": "cross-env NODE_ENV=test torus run npm run test",
     "update-client": "node internals/scripts/update-client.js"
   },
   "engines": {
@@ -42,7 +40,7 @@
     "pg": "^6.1.2",
     "pg-hstore": "^2.3.2",
     "sequelize": "^3.28.0",
-    "twilio": "^2.11.1"
+    "twilio": "^3.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

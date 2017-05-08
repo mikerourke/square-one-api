@@ -2,25 +2,11 @@
 
 /* Internal dependencies */
 import { getTransformedModifiers } from '../lib/entity-modifications';
+import { getPhoneAttribute } from '../lib/attributes';
 import getNextIdNumber from '../lib/id-generator';
 import sendTextMessages from '../lib/text-message';
 
-const assignIdsHook = (
-    messageModel: Object,
-    messages: Array<Object>,
-): Promise<*> =>
-    new Promise((resolve, reject) => {
-        getNextIdNumber(messageModel)
-            .then((nextId) => {
-                let messageId = nextId;
-                messages.forEach((message) => {
-                    message.id = messageId;
-                    messageId += 1;
-                });
-                resolve();
-            })
-            .catch(error => reject(error));
-    });
+const getPrefix = () => '103';
 
 const sendMessagesHook = (messages: Array<Object>): Promise<*> =>
     new Promise((resolve, reject) => {
@@ -30,27 +16,40 @@ const sendMessagesHook = (messages: Array<Object>): Promise<*> =>
         }));
         sendTextMessages(messagesToSend)
             .then(() => resolve())
-            .catch(error => reject(error));
+            .catch(error => reject(new Error(error)));
     });
 
 
-const defineMessage = (sequelize: Sequelize, DataTypes: DataTypes) => {
+export default function defineMessage(
+    sequelize: Sequelize,
+    DataTypes: DataTypes,
+) {
     const messageModel = sequelize.define('Message', {
         id: {
             type: DataTypes.BIGINT,
             primaryKey: true,
         },
         parentId: DataTypes.BIGINT,
-        messageType: DataTypes.STRING,
-        recipient: DataTypes.STRING,
+        messageType: {
+            type: DataTypes.STRING,
+            defaultValue: 'text',
+        },
+        recipient: getPhoneAttribute.call(this, DataTypes),
         subject: DataTypes.STRING,
-        body: DataTypes.STRING,
+        body: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notEmpty: true,
+            },
+        },
         createdBy: DataTypes.INTEGER,
         updatedBy: DataTypes.INTEGER,
     }, {
         tableName: 'messages',
         freezeTableName: true,
         classMethods: {
+            getPrefix,
             associate: (models) => {
                 messageModel.belongsTo(models.Lead, {
                     foreignKey: 'parentId',
@@ -71,18 +70,19 @@ const defineMessage = (sequelize: Sequelize, DataTypes: DataTypes) => {
                                 });
                                 resolve();
                             })
-                            .catch(error => reject(error));
+                            .catch(error => reject(new Error(error)));
                     })
-                    .catch(error => reject(error));
+                    .catch(error => reject(new Error(error)));
             }),
             afterBulkCreate: messages => getTransformedModifiers(messages),
             afterFind: result => getTransformedModifiers(result),
+        },
+        instanceMethods: {
+            getPrefix,
         },
         scopes: {
             inParent: parentId => ({ where: { parentId } }),
         },
     });
     return messageModel;
-};
-
-export default defineMessage;
+}

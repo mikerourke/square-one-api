@@ -1,7 +1,10 @@
 /* @flow */
 
-const defineSetting = (sequelize: Sequelize, DataTypes: DataTypes) =>
-    sequelize.define('Setting', {
+export default function defineSetting(
+    sequelize: Sequelize,
+    DataTypes: DataTypes,
+) {
+    return sequelize.define('Setting', {
         category: DataTypes.STRING,
         settingName: DataTypes.STRING,
         data: DataTypes.JSONB,
@@ -29,7 +32,7 @@ const defineSetting = (sequelize: Sequelize, DataTypes: DataTypes) =>
                         });
                         resolve();
                     })
-                    .catch(error => reject(error));
+                    .catch(error => reject(new Error(error)));
             }),
         },
         indexes: [
@@ -39,5 +42,4 @@ const defineSetting = (sequelize: Sequelize, DataTypes: DataTypes) =>
             },
         ],
     });
-
-export default defineSetting;
+}

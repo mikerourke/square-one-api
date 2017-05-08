@@ -14,7 +14,7 @@ const notFoundMessage = { message: 'Message not found' };
  * Assigns routes to the Express Router instance associated with Message models.
  * @param {Object} router Express router that routes are assigned to.
  */
-const assignMessageRoutes = (router: Router) => {
+export default function assignMessageRoutes(router: Router) {
     router
         .route('/leads/:leadId/messages')
         .get((req: Request, res: Response) => {
@@ -58,6 +58,4 @@ const assignMessageRoutes = (router: Router) => {
                 })
                 .catch(error => res.status(400).send(error));
         });
-};
-
-export default assignMessageRoutes;
+}

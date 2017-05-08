@@ -4,7 +4,12 @@
 import { getTransformedModifiers } from '../lib/entity-modifications';
 import getNextIdNumber from '../lib/id-generator';
 
-const defineChange = (sequelize: Sequelize, DataTypes: DataTypes) => {
+const getPrefix = () => '102';
+
+export default function defineChange(
+    sequelize: Sequelize,
+    DataTypes: DataTypes,
+) {
     const changeModel = sequelize.define('Change', {
         id: {
             type: DataTypes.BIGINT,
@@ -21,6 +26,7 @@ const defineChange = (sequelize: Sequelize, DataTypes: DataTypes) => {
         tableName: 'changes',
         freezeTableName: true,
         classMethods: {
+            getPrefix,
             associate: (models) => {
                 changeModel.belongsTo(models.Lead, {
                     foreignKey: 'parentId',
@@ -35,16 +41,17 @@ const defineChange = (sequelize: Sequelize, DataTypes: DataTypes) => {
                         change.id = nextId;
                         resolve();
                     })
-                    .catch(error => reject(error));
+                    .catch(error => reject(new Error(error)));
             }),
             afterCreate: change => getTransformedModifiers(change),
             afterFind: result => getTransformedModifiers(result),
+        },
+        instanceMethods: {
+            getPrefix,
         },
         scopes: {
             inParent: parentId => ({ where: { parentId } }),
         },
     });
     return changeModel;
-};
-
-export default defineChange;
+}

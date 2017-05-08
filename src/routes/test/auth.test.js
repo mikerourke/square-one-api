@@ -4,11 +4,12 @@ import request from 'supertest';
 /* Internal dependencies */
 import app from '../../index';
 import db from '../../models';
-import { validUser, URI } from './.test.js';
+import { validUser } from '../../models/test/helpers';
+import { URI } from './helpers';
 
 describe('Authentication Routes', () => {
     before((done) => {
-        db.sequelize.sync().then(() => done());
+        db.sequelize.sync().then(() => done()).catch(error => done(error));
     });
 
     it('fails [400] to login without parameters', (done) => {

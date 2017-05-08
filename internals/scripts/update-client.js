@@ -18,7 +18,7 @@ const removeExistingClient = () => new Promise((resolve, reject) => {
         console.log(green('Existing client path deleted.'));
         resolve();
     } else {
-        reject('Error removing existing client');
+        reject(new Error('Error removing existing client'));
     }
 });
 
@@ -31,7 +31,7 @@ const buildClientIfRequired = () => new Promise((resolve, reject) => {
         shell.cd(webPath);
         shell.exec('npm run build', (code, stdout, stderr) => {
             if (stderr) {
-                reject('Error occurred: ' + stderr);
+                reject(new Error(stderr));
             }
             console.log(green('Files successfully transpiled.'));
             resolve();
@@ -53,7 +53,7 @@ const copyClientToSrc = () => new Promise((resolve, reject) => {
         console.log(green('Client folder successfully copied.'));
         resolve();
     } else {
-        reject('Error creating client folder.');
+        reject(new Error('Error creating client folder.'));
     }
 });
 

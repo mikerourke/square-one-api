@@ -3,12 +3,17 @@
 /* Internal dependencies */
 import { getTransformedModifiers } from '../lib/entity-modifications';
 import {
-    getEmailValidation,
-    getPhoneValidation,
-} from '../lib/validations';
+    getEmailAttribute,
+    getPhoneAttribute,
+} from '../lib/attributes';
 import getNextIdNumber from '../lib/id-generator';
 
-const defineLead = (sequelize: Sequelize, DataTypes: DataTypes) => {
+const getPrefix = () => '101';
+
+export default function defineLead(
+    sequelize: Sequelize,
+    DataTypes: DataTypes,
+) {
     const leadModel = sequelize.define('Lead', {
         id: {
             type: DataTypes.BIGINT,
@@ -17,14 +22,26 @@ const defineLead = (sequelize: Sequelize, DataTypes: DataTypes) => {
         leadName: DataTypes.STRING,
         contactName: DataTypes.STRING,
         source: DataTypes.STRING,
-        leadFee: DataTypes.FLOAT,
-        phone: getPhoneValidation.call(this, DataTypes),
-        email: getEmailValidation.call(this, DataTypes),
+        leadFee: {
+            type: DataTypes.FLOAT,
+            defaultValue: 0,
+        },
+        phone: getPhoneAttribute.call(this, DataTypes),
+        email: getEmailAttribute.call(this, DataTypes),
         address: DataTypes.STRING,
-        lat: DataTypes.DECIMAL,
-        lng: DataTypes.DECIMAL,
+        lat: {
+            type: DataTypes.DECIMAL,
+            defaultValue: 0,
+        },
+        lng: {
+            type: DataTypes.DECIMAL,
+            defaultValue: 0,
+        },
         description: DataTypes.STRING,
-        status: DataTypes.STRING,
+        status: {
+            type: DataTypes.STRING,
+            defaultValue: 'New',
+        },
         assignTo: DataTypes.STRING,
         createdBy: DataTypes.INTEGER,
         updatedBy: DataTypes.INTEGER,
@@ -32,6 +49,7 @@ const defineLead = (sequelize: Sequelize, DataTypes: DataTypes) => {
         tableName: 'leads',
         freezeTableName: true,
         classMethods: {
+            getPrefix,
             associate: (models) => {
                 leadModel.hasMany(models.Change, {
                     foreignKey: 'parentId',
@@ -54,13 +72,14 @@ const defineLead = (sequelize: Sequelize, DataTypes: DataTypes) => {
                         lead.id = nextId;
                         resolve();
                     })
-                    .catch(error => reject(error));
+                    .catch(error => reject(new Error(error)));
             }),
             afterCreate: lead => getTransformedModifiers(lead),
             afterFind: result => getTransformedModifiers(result),
         },
+        instanceMethods: {
+            getPrefix,
+        },
     });
     return leadModel;
-};
-
-export default defineLead;
+}

@@ -35,23 +35,18 @@ const sendTextMessage = (textMessage: TextMessage): Promise<*> =>
             body,
             from: sendingNumber,
         };
-        setTimeout(() => {
-            client.messages.create(messageToSend, (error, data) => {
-                if (error) {
-                    reject(error.message);
-                }
-                resolve();
-            });
-        }, 5000);
+        client.messages.create(messageToSend)
+            .then(() => resolve())
+            .catch(error => reject(new Error(error)));
     });
 
 const sendTextMessages = (textMessages: Array<TextMessage>): Promise<*> =>
     new Promise((resolve, reject) => {
-        const messagesSent = textMessages.map(
-            textMessage => sendTextMessage(textMessage));
+        const messagesSent = textMessages.map(textMessage =>
+            sendTextMessage(textMessage));
         Promise.all(messagesSent)
             .then(() => resolve())
-            .catch(error => reject(error));
+            .catch(error => reject(new Error(error)));
     });
 
 export default sendTextMessages;

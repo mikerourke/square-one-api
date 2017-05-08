@@ -5,9 +5,9 @@ import bcrypt from 'bcrypt';
 
 /* Internal dependencies */
 import {
-    getEmailValidation,
-    getPhoneValidation,
-} from '../lib/validations';
+    getEmailAttribute,
+    getPhoneAttribute,
+} from '../lib/attributes';
 
 /**
  * Ensures the password the user enters if secure.
@@ -16,22 +16,25 @@ const checkForSecurePassword = (user, options): Promise<*> =>
     new Promise((resolve, reject) => {
         if (user.password) {
             if (user.password !== user.passwordConfirmation) {
-                reject("Password confirmation doesn't match Password");
+                reject(new Error("Confirmation doesn't match password"));
             }
             bcrypt.hash(user.get('password'), 10, (error, hash) => {
                 if (error) {
-                    reject(error);
+                    reject(new Error(error));
                 }
                 user.set('passwordDigest', hash);
                 resolve(options);
             });
         } else {
-            reject('No password found.');
+            reject(new Error('No password found.'));
         }
     });
 
-const defineUser = (sequelize: Sequelize, DataTypes: DataTypes) =>
-    sequelize.define('User', {
+export default function defineUser(
+    sequelize: Sequelize,
+    DataTypes: DataTypes,
+) {
+    return sequelize.define('User', {
         username: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -41,8 +44,8 @@ const defineUser = (sequelize: Sequelize, DataTypes: DataTypes) =>
             },
         },
         fullName: DataTypes.STRING,
-        phone: getPhoneValidation.call(this, DataTypes),
-        email: getEmailValidation.call(this, DataTypes),
+        phone: getPhoneAttribute.call(this, DataTypes),
+        email: getEmailAttribute.call(this, DataTypes),
         title: DataTypes.STRING,
         role: DataTypes.ENUM(
             'admin',
@@ -91,13 +94,12 @@ const defineUser = (sequelize: Sequelize, DataTypes: DataTypes) =>
                             if (result) {
                                 resolve(thisUser);
                             } else {
-                                reject('Invalid password');
+                                reject(new Error('Invalid password'));
                             }
                         })
-                        .catch(error => reject(error));
+                        .catch(error => reject(new Error(error)));
                 });
             },
         },
     });
-
-export default defineUser;
+}
