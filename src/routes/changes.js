@@ -15,27 +15,27 @@ const notFoundMessage = { message: 'Change not found' };
  * @param {Object} router Express router that routes are assigned to.
  */
 export default function assignChangeRoutes(router: Router) {
-    router
-        .route('/leads/:leadId/changes')
-        .get((req: Request, res: Response) => {
-            return Change.scope({ method: ['inParent', req.params.leadId] })
-                .findAll()
-                .then((changes) => {
-                    if (!changes) {
-                        return res.status(404).send(notFoundMessage);
-                    }
-                    return res.status(200).send(changes);
-                })
-                .catch(error => res.status(400).send(error));
+  router
+    .route('/leads/:leadId/changes')
+    .get((req: Request, res: Response) => {
+      return Change.scope({ method: ['inParent', req.params.leadId] })
+        .findAll()
+        .then((changes) => {
+          if (!changes) {
+            return res.status(404).send(notFoundMessage);
+          }
+          return res.status(200).send(changes);
         })
-        .post((req: Request, res: Response) => {
-            const { body = {}, params: { leadId = 0 } } = req;
-            const newEntity = Object.assign({}, body, {
-                parentId: leadId,
-            });
-            return Change
-                .create(newEntity, { fields: getFieldsForCreate(newEntity) })
-                .then(change => res.status(201).send(change))
-                .catch(error => res.status(400).send(error));
-        });
+        .catch(error => res.status(400).send(error));
+    })
+    .post((req: Request, res: Response) => {
+      const { body = {}, params: { leadId = 0 } } = req;
+      const newEntity = Object.assign({}, body, {
+        parentId: leadId,
+      });
+      return Change
+        .create(newEntity, { fields: getFieldsForCreate(newEntity) })
+        .then(change => res.status(201).send(change))
+        .catch(error => res.status(400).send(error));
+    });
 }

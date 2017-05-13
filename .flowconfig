@@ -2,7 +2,6 @@
   .*/__tests__/.*
   .*/test/.*
   .*\.test\.js
-  .*/internals/.*
 
 [libs]
   # These are custom global declarations:

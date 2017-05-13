@@ -22,19 +22,19 @@ const jwtAuthMiddleware = passport.authenticate('jwt', { session: false });
  * Assigns handlers to the application router.
  */
 const assignRoutes = (app: Application) => {
-    const authRouter = Router();
-    assignAuthRoutes(authRouter);
-    app.use('/api/auth', authRouter);
+  const authRouter = Router();
+  assignAuthRoutes(authRouter);
+  app.use('/api/auth', authRouter);
 
-    const apiRouter = Router();
-    apiRouter.use(jwtAuthMiddleware);
-    assignLeadRoutes(apiRouter);
-    assignChangeRoutes(apiRouter);
-    assignMessageRoutes(apiRouter);
-    assignNoteRoutes(apiRouter);
-    assignSettingRoutes(apiRouter);
-    assignUserRoutes(apiRouter);
-    app.use('/api', apiRouter);
+  const apiRouter = Router();
+  apiRouter.use(jwtAuthMiddleware);
+  assignLeadRoutes(apiRouter);
+  assignChangeRoutes(apiRouter);
+  assignMessageRoutes(apiRouter);
+  assignNoteRoutes(apiRouter);
+  assignSettingRoutes(apiRouter);
+  assignUserRoutes(apiRouter);
+  app.use('/api', apiRouter);
 };
 
 export default assignRoutes;

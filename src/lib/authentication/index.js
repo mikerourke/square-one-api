@@ -16,25 +16,25 @@ const { User } = (models: Object);
  * Setup the local strategy for Passport authentication.
  */
 const localLogin = new LocalStrategy({ usernameField: 'username' },
-    (username, password, done) => {
-        User.findOne({ where: { username } })
-            .then((user) => {
-                user.authenticate(password)
-                    .then(authenticatedUser => done(null, authenticatedUser))
-                    .catch(error => done(error));
-            })
-            .catch(error => done(null, false, { error }));
-    });
+  (username, password, done) => {
+    User.findOne({ where: { username } })
+      .then((user) => {
+        user.authenticate(password)
+          .then(authenticatedUser => done(null, authenticatedUser))
+          .catch(error => done(error));
+      })
+      .catch(error => done(null, false, { error }));
+  });
 
 const jwtOptions = {
-    jwtFromRequest: ExtractJwt.fromAuthHeader(),
-    secretOrKey: secret,
+  jwtFromRequest: ExtractJwt.fromAuthHeader(),
+  secretOrKey: secret,
 };
 
 const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
-    User.findOne({ where: { username: payload.username } })
-        .then(user => done(null, user))
-        .catch(error => done(null, false, { error }));
+  User.findOne({ where: { username: payload.username } })
+    .then(user => done(null, user))
+    .catch(error => done(null, false, { error }));
 });
 
 passport.use(jwtLogin);

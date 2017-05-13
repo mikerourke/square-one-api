@@ -5,22 +5,20 @@
  * @param {DataTypes} DataTypes Sequelize DataTypes object.
  * @returns {Object} Column object with validation.
  */
-export const getEmailAttribute = (
-    DataTypes: DataTypes,
-): Object => ({
-    type: DataTypes.STRING,
-    allowNull: true,
-    defaultValue: null,
-    set: function set(value: string) {
-        if (value) {
-            this.setDataValue('email', value.toLowerCase());
-        }
-    },
-    validate: {
-        isEmail: true,
-        notEmpty: false,
-        len: [1, 255],
-    },
+export const getEmailAttribute = (DataTypes: DataTypes): Object => ({
+  type: DataTypes.STRING,
+  allowNull: true,
+  defaultValue: null,
+  set: function set(value: string) {
+    if (value) {
+      this.setDataValue('email', value.toLowerCase());
+    }
+  },
+  validate: {
+    isEmail: true,
+    notEmpty: false,
+    len: [1, 255],
+  },
 });
 
 /**
@@ -28,15 +26,13 @@ export const getEmailAttribute = (
  * @param {DataTypes} DataTypes Sequelize DataTypes object.
  * @returns {Object} Column object with validation.
  */
-export const getPhoneAttribute = (
-    DataTypes: DataTypes,
-) => ({
-    type: DataTypes.STRING,
-    allowNull: true,
-    defaultValue: null,
-    validate: {
-        not: ['[a-z]', 'i'],
-        notEmpty: false,
-        len: [10],
-    },
+export const getPhoneAttribute = (DataTypes: DataTypes): Object => ({
+  type: DataTypes.STRING,
+  allowNull: true,
+  defaultValue: null,
+  validate: {
+    not: ['[a-z]', 'i'],
+    notEmpty: false,
+    len: [10],
+  },
 });

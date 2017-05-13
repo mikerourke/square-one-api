@@ -27,26 +27,26 @@ export type TextMessage = {
  * @param {TextMessage} textMessage Details of text message to send.
  */
 const sendTextMessage = (textMessage: TextMessage): Promise<*> =>
-    new Promise((resolve, reject) => {
-        const client = twilio(accountSid, authToken);
-        const { to, body } = textMessage;
-        const messageToSend = {
-            to,
-            body,
-            from: sendingNumber,
-        };
-        client.messages.create(messageToSend)
-            .then(() => resolve())
-            .catch(error => reject(new Error(error)));
-    });
+  new Promise((resolve, reject) => {
+    const client = twilio(accountSid, authToken);
+    const { to, body } = textMessage;
+    const messageToSend = {
+      to,
+      body,
+      from: sendingNumber,
+    };
+    client.messages.create(messageToSend)
+      .then(() => resolve())
+      .catch(error => reject(new Error(error)));
+  });
 
 const sendTextMessages = (textMessages: Array<TextMessage>): Promise<*> =>
-    new Promise((resolve, reject) => {
-        const messagesSent = textMessages.map(textMessage =>
-            sendTextMessage(textMessage));
-        Promise.all(messagesSent)
-            .then(() => resolve())
-            .catch(error => reject(new Error(error)));
-    });
+  new Promise((resolve, reject) => {
+    const messagesSent = textMessages.map(textMessage =>
+      sendTextMessage(textMessage));
+    Promise.all(messagesSent)
+      .then(() => resolve())
+      .catch(error => reject(new Error(error)));
+  });
 
 export default sendTextMessages;

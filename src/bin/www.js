@@ -12,5 +12,5 @@ const port = process.env.PORT || 8080;
 app.set('port', port);
 
 db.sequelize.sync().then(() => {
-    http.createServer(app).listen(port);
+  http.createServer(app).listen(port);
 });
