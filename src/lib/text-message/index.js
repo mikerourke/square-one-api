@@ -3,10 +3,7 @@
 /* External dependencies */
 import twilio from 'twilio';
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const sendingNumber = process.env.TWILIO_NUMBER;
-
+/* Types */
 export type TextMessage = {
     to: string,
     body: string,
@@ -21,6 +18,11 @@ export type TextMessage = {
  *     moreInfo: 'https://www.twilio.com/docs/errors/21211'
  *  }
  */
+
+// If the Twilio environment variables aren't present, no messages will be sent.
+const accountSid = process.env.TWILIO_ACCOUNT_SID || '';
+const authToken = process.env.TWILIO_AUTH_TOKEN || '';
+const sendingNumber = process.env.TWILIO_NUMBER || '';
 
 /**
  * Sends a message to the specified phone number using the Twilio client.
@@ -40,8 +42,37 @@ const sendTextMessage = (textMessage: TextMessage): Promise<*> =>
       .catch(error => reject(new Error(error)));
   });
 
+/**
+ * Checks for the presence of required environment variables and returns an
+ *    error message is any of them weren't found.
+ * @returns {string} Error message to display.
+ */
+const validateEnvVars = (): string => {
+  if (accountSid === '') {
+    return 'Twilio account SID could not be found.';
+  }
+  if (authToken === '') {
+    return 'Twilio authorization token could not be found.';
+  }
+  if (sendingNumber === '') {
+    return 'Twilio sending number could not be found.';
+  }
+  return '';
+};
+
+/**
+ * Loops through specified text messages and sends each one out using the
+ *    Twilio API.
+ * @param {Array} textMessages Text messages to send.
+ */
 const sendTextMessages = (textMessages: Array<TextMessage>): Promise<*> =>
   new Promise((resolve, reject) => {
+    // Ensure Twilio environment variables are present.
+    const envVarMessage = validateEnvVars();
+    if (!envVarMessage === '') {
+      reject(new Error(envVarMessage));
+    }
+
     const messagesSent = textMessages.map(textMessage =>
       sendTextMessage(textMessage));
     Promise.all(messagesSent)

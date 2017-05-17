@@ -26,16 +26,19 @@ const localLogin = new LocalStrategy({ usernameField: 'username' },
       .catch(error => done(null, false, { error }));
   });
 
-const jwtOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeader(),
-  secretOrKey: secret,
-};
-
-const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
-  User.findOne({ where: { username: payload.username } })
-    .then(user => done(null, user))
-    .catch(error => done(null, false, { error }));
-});
+/**
+ * Setup the JWT strategy for Passport authentication.
+ */
+const jwtLogin = new JwtStrategy(
+  {
+    jwtFromRequest: ExtractJwt.fromAuthHeader(),
+    secretOrKey: secret,
+  },
+  (payload, done) => {
+    User.findOne({ where: { username: payload.username } })
+      .then(user => done(null, user))
+      .catch(error => done(null, false, { error }));
+  });
 
 passport.use(jwtLogin);
 passport.use(localLogin);

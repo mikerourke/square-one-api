@@ -2,7 +2,7 @@
 import db from '../index';
 import { validLead } from './helpers';
 
-describe.only('Lead Model', () => {
+describe('Lead Model', () => {
   before((done) => {
     db.sequelize.sync().then(() => done()).catch(error => done(error));
   });

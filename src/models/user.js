@@ -73,10 +73,8 @@ export default function defineUser(
     tableName: 'users',
     freezeTableName: true,
     hooks: {
-      beforeCreate: (user, options) =>
-        checkForSecurePassword(user, options),
-      beforeUpdate: (user, options) =>
-        checkForSecurePassword(user, options),
+      beforeCreate: (user, options) => checkForSecurePassword(user, options),
+      beforeUpdate: (user, options) => checkForSecurePassword(user, options),
     },
     indexes: [
       {
@@ -89,7 +87,8 @@ export default function defineUser(
         const thisUser = this;
         return new Promise((resolve, reject) => {
           const digest = thisUser.passwordDigest || '';
-          bcrypt.compare(value, digest)
+          bcrypt
+            .compare(value, digest)
             .then((result) => {
               if (result) {
                 resolve(thisUser);

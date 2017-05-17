@@ -11,7 +11,7 @@
     "setup": "rm -rf node_modules && yarn cache clean && yarn install",
     "start": "nodemon ./src/bin/www.js --exec \"node --require dotenv/config --require babel-register\"",
     "start:test": "cross-env NODE_ENV=test npm start",
-    "test": "find ./src -name '*.test.js' | xargs cross-env NODE_ENV=test mocha --opts ./mocha.opts || exit 0",
+    "test": "find ./src -name '*.test.js' | xargs cross-env NODE_ENV=test mocha --opts ./mocha.opts --require dotenv/config || exit 0",
     "update-client": "node internals/scripts/update-client.js"
   },
   "engines": {

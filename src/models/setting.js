@@ -22,8 +22,7 @@ export default function defineSetting(
         sequelize.model('User')
           .findAll({ where: { title: 'Representative' } })
           .then((users) => {
-            const representatives = users.map(
-              user => user.fullName);
+            const representatives = users.map(user => user.fullName);
             results.push({
               id: 999, // Arbitrary value to prevent ID collision.
               category: 'lists',

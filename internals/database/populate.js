@@ -1,9 +1,13 @@
 /* Internal dependencies */
-import db from '../../src/models';
+const db = require('../../src/models');
 const data = require('./data.json');
 
 const { Setting, User } = db;
 
+/**
+ * Populate the settings table in the database.
+ * @returns {Promise}
+ */
 const addSettings = () => new Promise((resolve, reject) => {
   const settingsToAdd = data.settings;
   Setting.bulkCreate(settingsToAdd)
@@ -11,6 +15,10 @@ const addSettings = () => new Promise((resolve, reject) => {
     .catch(error => reject(new Error(error)));
 });
 
+/**
+ * Add the admin user to the users table in the database.
+ * @returns {Promise}
+ */
 const addAdminUser = () => new Promise((resolve, reject) => {
   const adminUserToAdd = data.users[0];
   User.create(adminUserToAdd)
@@ -18,6 +26,10 @@ const addAdminUser = () => new Promise((resolve, reject) => {
     .catch(error => reject(new Error(error)));
 });
 
+/**
+ * Populate the users table in the database.
+ * @returns {Promise}
+ */
 const addUsers = () => new Promise((resolve, reject) => {
   const usersToAdd = data.users;
   User.bulkCreate(usersToAdd)
